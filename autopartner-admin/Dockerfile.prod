@@ -1,0 +1,11 @@
+FROM node:21-alpine
+
+WORKDIR /usr/src/app
+ARG VITE_API_URL
+ENV VITE_API=$VITE_API_URL
+ENV NODE_ENV development
+COPY package*.json ./
+RUN npm install
+
+CMD ["npm", "run", "build"]
+

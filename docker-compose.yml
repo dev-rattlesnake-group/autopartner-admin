@@ -1,4 +1,4 @@
-version: '1.10'
+version: '1.20'
 
 x-app: &default
   restart: unless-stopped
@@ -76,31 +76,34 @@ services:
     <<: *default
     container_name: autopartner-api
     build:
-      context: ./autopartner-api  
+      context: ./autopartner-api
+      dockerfile: Dockerfile   
     depends_on:
       - autopartner_db 
     volumes:
       - ./autopartner-api:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - '4000:4000'
+      - '3000:3000'
 
   autopartner_web:
     <<: *default
     build:
       context: ./autopartner-admin      
+      target: development
       args:
         - VITE_API_URL=${API_URL}
     restart: unless-stopped 
-    container_name: autopartner-admin 
+    container_name: autopartner-admin
     tty: true
     depends_on:
       - autopartner_api
     ports:
-      - '3000:3000'
+      - '4000:4000'
     volumes:
-      - ./autopartner-admin:/app/refine
-      - /app/refine/node_modules
+      - ./autopartner-admin:/usr/src/app
+      - /usr/src/app/node_modules
+    
 
   autopartner_nginx:
     container_name: autopartner-nginx
@@ -113,7 +116,9 @@ services:
     networks:
       - autopartner-network
     ports:
-      - "80:80"       
+      - "80:80"   
+
+ 
 
 volumes:
   pgdata:

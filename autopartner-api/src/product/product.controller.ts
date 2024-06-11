@@ -110,24 +110,25 @@ export class ProductController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
-    @Put()
+    @Put(':id')
     async updateProduct(
         @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
         file: Express.Multer.File,
-        @Body() dto: CreateProductDto & { id: number },
+        @Param() id: number,
+        @Body() dto: CreateProductDto,
         @RequestUser() user: RequestAccount
     ) {
         try {
-            const createProductDto = structuredClone(
-                dto
-            ) as ProductCreateType & { id: number }
+            const createProductDto = structuredClone(dto) as ProductCreateType
             if (file) {
                 console.log(file)
                 createProductDto.image_url = `${this.configService.get('API_URL')}/files/${file.filename}`
             }
             createProductDto.account_id = user.id
-            const product =
-                await this.productService.updateProduct(createProductDto)
+            const product = await this.productService.updateProduct(
+                createProductDto,
+                id
+            )
             return product
         } catch (err) {
             throw new HttpException(
