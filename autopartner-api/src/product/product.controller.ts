@@ -11,6 +11,7 @@ import {
     Query,
     UseInterceptors,
     UploadedFile,
+    Delete,
 } from '@nestjs/common'
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard'
 import { RolesGuard } from 'src/auth/guards/role.guard'
@@ -86,12 +87,68 @@ export class ProductController {
         try {
             const createProductDto = structuredClone(dto) as ProductCreateType
             if (file) {
+                console.log(file)
                 createProductDto.image_url = `${this.configService.get('API_URL')}/files/${file.filename}`
             }
             createProductDto.account_id = user.id
             const product =
                 await this.productService.createProduct(createProductDto)
             return product
+        } catch (err) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: err?.message || err?.details || err,
+                },
+                HttpStatus.BAD_REQUEST,
+                {
+                    cause: err,
+                }
+            )
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Put()
+    async updateProduct(
+        @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
+        file: Express.Multer.File,
+        @Body() dto: CreateProductDto & { id: number },
+        @RequestUser() user: RequestAccount
+    ) {
+        try {
+            const createProductDto = structuredClone(
+                dto
+            ) as ProductCreateType & { id: number }
+            if (file) {
+                console.log(file)
+                createProductDto.image_url = `${this.configService.get('API_URL')}/files/${file.filename}`
+            }
+            createProductDto.account_id = user.id
+            const product =
+                await this.productService.updateProduct(createProductDto)
+            return product
+        } catch (err) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: err?.message || err?.details || err,
+                },
+                HttpStatus.BAD_REQUEST,
+                {
+                    cause: err,
+                }
+            )
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Delete(':id')
+    async deleteProduct(@Param() id: number) {
+        try {
+            return await this.productService.deleteProduct(id)
         } catch (err) {
             throw new HttpException(
                 {

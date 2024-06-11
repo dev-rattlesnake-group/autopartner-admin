@@ -9,11 +9,6 @@ import {
 
 export class CreateProductDto {
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    account_id: number
-
-    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     category: string
@@ -24,19 +19,28 @@ export class CreateProductDto {
     brand: string
 
     @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    price: number
+
+    @ApiProperty()
     @IsOptional()
     @IsString()
     name: string
 
     @ApiProperty()
-    @IsOptional()
     @IsBoolean()
-    in_stock: string
+    in_stock: boolean
 
     @ApiProperty()
     @IsOptional()
     @IsString()
     engine?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    vehicles_year?: string
 
     @ApiProperty()
     @IsOptional()
@@ -92,6 +96,16 @@ export class CreateProductDto {
     @IsOptional()
     @IsString()
     trailer_length?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    color?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    options?: string
 
     @ApiProperty()
     @IsOptional()

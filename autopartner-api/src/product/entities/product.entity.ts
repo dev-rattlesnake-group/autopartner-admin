@@ -15,7 +15,10 @@ export type ProductCreateType = {
     category: string
     brand: string
     name: string
+    in_stock: boolean
+    price: number
     engine?: string
+    vehicles_year?: string
     transmission?: string
     max_weight?: string
     cabin_type?: string
@@ -28,6 +31,8 @@ export type ProductCreateType = {
     fifth_wheel_height?: string
     trailer_length?: string
     euro?: string
+    color?: string
+    options?: string
     image_url?: string
 }
 
@@ -51,8 +56,14 @@ export class Products extends BaseEntity {
     @Column({ type: 'bool' })
     in_stock: boolean
 
+    @Column({ type: 'int' })
+    price: number
+
     @Column({ type: 'varchar', nullable: true })
     engine?: string
+
+    @Column({ type: 'varchar', nullable: true })
+    vehicles_year?: string
 
     @Column({ type: 'varchar', nullable: true })
     transmission?: string
@@ -89,6 +100,12 @@ export class Products extends BaseEntity {
 
     @Column({ type: 'varchar', nullable: true })
     euro?: string
+
+    @Column({ type: 'varchar', nullable: true })
+    color?: string
+
+    @Column({ type: 'varchar', nullable: true })
+    options?: string
 
     @Column({ type: 'varchar', nullable: true })
     image_url?: string

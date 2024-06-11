@@ -99,6 +99,16 @@ export class Products1718002136923 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
+                        name: 'price',
+                        type: 'int',
+                    },
+                    {
+                        name: 'vehicles_year',
+                        comment: 'Год выпуска',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
                         name: 'engine',
                         comment: 'Двигатель',
                         type: 'varchar',
@@ -179,6 +189,18 @@ export class Products1718002136923 implements MigrationInterface {
                     {
                         name: 'euro',
                         comment: 'Класс выхлопа EURO',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
+                        name: 'color',
+                        comment: 'Цвет',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
+                        name: 'options',
+                        comment: 'Дополнительные опции',
                         type: 'varchar',
                         isNullable: true,
                     },

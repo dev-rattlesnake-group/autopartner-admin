@@ -56,4 +56,16 @@ export class ProductRepository extends Repository<Products> {
     async createProduct(product: ProductCreateType): Promise<Products> {
         return this.save(product)
     }
+
+    async updateProduct(id: number, product: ProductCreateType) {
+        return this.createQueryBuilder('products')
+            .update()
+            .set(product)
+            .where('id = :id', { id })
+    }
+    async deleteProduct(id: number) {
+        return this.createQueryBuilder('products')
+            .delete()
+            .where('id = :id', { id })
+    }
 }
