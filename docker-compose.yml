@@ -1,4 +1,4 @@
-version: '0.01'
+version: '1.10'
 
 x-app: &default
   restart: unless-stopped
@@ -83,7 +83,37 @@ services:
       - ./autopartner-api:/usr/src/app
       - /usr/src/app/node_modules
     ports:
+      - '4000:4000'
+
+  autopartner_web:
+    <<: *default
+    build:
+      context: ./autopartner-admin      
+      args:
+        - VITE_API_URL=${API_URL}
+    restart: unless-stopped 
+    container_name: autopartner-admin 
+    tty: true
+    depends_on:
+      - autopartner_api
+    ports:
       - '3000:3000'
+    volumes:
+      - ./autopartner-admin:/app/refine
+      - /app/refine/node_modules
+
+  autopartner_nginx:
+    container_name: autopartner-nginx
+    restart: unless-stopped
+    build:
+      context: ./nginx
+    depends_on:
+      autopartner_web:
+        condition: service_started
+    networks:
+      - autopartner-network
+    ports:
+      - "80:80"       
 
 volumes:
   pgdata:
