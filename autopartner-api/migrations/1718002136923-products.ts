@@ -269,7 +269,7 @@ export class Products1718002136923 implements MigrationInterface {
             `INSERT INTO brands (name) VALUES ('Shacman'),('Mercedes-Benz'),('Beiben'),('Krone'),('FAW'),('HOWO')`
         )
         await queryRunner.query(
-            `INSERT INTO accounts (login, ) VALUES ('Shacman'),('Mercedes-Benz'),('Beiben'),('Krone'),('FAW'),('HOWO')`
+            `INSERT INTO accounts (login, password_hash, role ) VALUES ('admin','$2a$10$pKXtbTSaM4Cx01mPgXlZC.oGfemWGI/wz.RaOnxMNm4sNK7kW2Kx.','admin')`
         )
     }
 
