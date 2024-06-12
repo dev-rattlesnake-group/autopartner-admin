@@ -40,6 +40,8 @@ import { ApiConsumes } from '@nestjs/swagger'
 import { generateFileName } from './helper/generate-filename.helper'
 import { ConfigService } from '@nestjs/config'
 import { diskStorage } from 'multer'
+import { Categories } from './entities/product-category.entity'
+import { Brands } from './entities/product-brand.entity'
 
 @Controller('products')
 export class ProductController {
@@ -53,7 +55,7 @@ export class ProductController {
         @FilteringParams([])
         filterParams?: Filtering,
         @SearchingParams() searchParams?: string,
-        @SortingParams([])
+        @SortingParams(['id'])
         sortParams?: Sorting
     ): Promise<PageDto<Products>> {
         return this.productService.getProducts(
@@ -64,32 +66,30 @@ export class ProductController {
         )
     }
 
+    @Get('categories')
+    async getCategories(): Promise<Categories[]> {
+        return this.productService.getCategories()
+    }
+
+    @Get('brands')
+    async getBrands(): Promise<Brands[]> {
+        return this.productService.getBrands()
+    }
+
+    @Get(':id')
+    async get(@Param() id: { id: number }): Promise<Products> {
+        return this.productService.getProduct(id.id)
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()
-    @ApiConsumes('multipart/form-data')
-    @UseInterceptors(
-        FileInterceptor('file', {
-            storage: diskStorage({
-                destination: './files',
-                filename: (req, file: Express.Multer.File, cb) => {
-                    cb(null, generateFileName(file.originalname))
-                },
-            }),
-        })
-    )
     async createProduct(
-        @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
-        file: Express.Multer.File,
         @Body() dto: CreateProductDto,
         @RequestUser() user: RequestAccount
     ) {
         try {
             const createProductDto = structuredClone(dto) as ProductCreateType
-            if (file) {
-                console.log(file)
-                createProductDto.image_url = `${this.configService.get('API_URL')}/files/${file.filename}`
-            }
             createProductDto.account_id = user.id
             const product =
                 await this.productService.createProduct(createProductDto)
@@ -114,7 +114,7 @@ export class ProductController {
     async updateProduct(
         @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
         file: Express.Multer.File,
-        @Param() id: number,
+        @Param() id: { id: number },
         @Body() dto: CreateProductDto,
         @RequestUser() user: RequestAccount
     ) {
@@ -127,7 +127,7 @@ export class ProductController {
             createProductDto.account_id = user.id
             const product = await this.productService.updateProduct(
                 createProductDto,
-                id
+                id.id
             )
             return product
         } catch (err) {
@@ -147,9 +147,9 @@ export class ProductController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Delete(':id')
-    async deleteProduct(@Param() id: number) {
+    async deleteProduct(@Param() id: { id: number }) {
         try {
-            return await this.productService.deleteProduct(id)
+            return await this.productService.deleteProduct(id.id)
         } catch (err) {
             throw new HttpException(
                 {

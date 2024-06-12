@@ -5,10 +5,18 @@ import { Filtering } from 'src/decorators/filtering-params.decorator'
 import { Sorting } from 'src/decorators/sorting.decorator'
 import { PageDto } from 'src/dto/pagination.dto'
 import { ProductCreateType, Products } from './entities/product.entity'
+import { CategoryRepository } from './categories.repository'
+import { Categories } from './entities/product-category.entity'
+import { Brands } from './entities/product-brand.entity'
+import { BrandRepository } from './brands.repository'
 
 @Injectable()
 export class ProductService {
-    constructor(private readonly productRepository: ProductRepository) {}
+    constructor(
+        private readonly productRepository: ProductRepository,
+        private readonly categoryRepository: CategoryRepository,
+        private readonly brandRepository: BrandRepository
+    ) {}
 
     async getProducts(
         pageOptionsDto: PageOptionsDto,
@@ -24,6 +32,11 @@ export class ProductService {
         )
     }
 
+    async getProduct(id: number): Promise<Products> {
+        console.log(id)
+        return this.productRepository.findOneBy({ id })
+    }
+
     async createProduct(product: ProductCreateType): Promise<Products> {
         return this.productRepository.createProduct(product)
     }
@@ -32,5 +45,12 @@ export class ProductService {
     }
     async deleteProduct(id: number) {
         return await this.productRepository.deleteProduct(id)
+    }
+
+    async getCategories(): Promise<Categories[]> {
+        return await this.categoryRepository.find()
+    }
+    async getBrands(): Promise<Brands[]> {
+        return this.brandRepository.find()
     }
 }

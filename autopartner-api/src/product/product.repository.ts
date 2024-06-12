@@ -39,9 +39,12 @@ export class ProductRepository extends Repository<Products> {
             })
         }
         if (sortParams) {
+            const sortParamDirectoin = sortParams.direction.toUpperCase() as
+                | 'ASC'
+                | 'DESC'
             queryBuilder.orderBy(
                 `products.${sortParams.property}`,
-                sortParams.direction
+                sortParamDirectoin
             )
         }
 
@@ -58,14 +61,17 @@ export class ProductRepository extends Repository<Products> {
     }
 
     async updateProduct(id: number, product: ProductCreateType) {
+        console.log({ id, product })
         return this.createQueryBuilder('products')
             .update()
             .set(product)
             .where('id = :id', { id })
+            .execute()
     }
     async deleteProduct(id: number) {
         return this.createQueryBuilder('products')
             .delete()
             .where('id = :id', { id })
+            .execute()
     }
 }

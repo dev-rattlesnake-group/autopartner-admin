@@ -30,7 +30,7 @@ export class CreateProductDto {
 
     @ApiProperty()
     @IsBoolean()
-    in_stock: boolean
+    in_stock?: boolean
 
     @ApiProperty()
     @IsOptional()
@@ -111,4 +111,9 @@ export class CreateProductDto {
     @IsOptional()
     @IsString()
     euro?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
+    image_url?: string
 }

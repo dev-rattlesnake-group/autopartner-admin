@@ -268,6 +268,9 @@ export class Products1718002136923 implements MigrationInterface {
         await queryRunner.query(
             `INSERT INTO brands (name) VALUES ('Shacman'),('Mercedes-Benz'),('Beiben'),('Krone'),('FAW'),('HOWO')`
         )
+        await queryRunner.query(
+            `INSERT INTO accounts (login, ) VALUES ('Shacman'),('Mercedes-Benz'),('Beiben'),('Krone'),('FAW'),('HOWO')`
+        )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

@@ -5,6 +5,7 @@ import BulkIcon from '@/assets/icons/BulkIcon.vue'
 import { message } from 'ant-design-vue'
 import { authHeader } from '@/services/auth-header.service'
 import type { UploadChangeParam } from 'ant-design-vue'
+import router from '@/router'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -19,82 +20,65 @@ onMounted(async () => {
   })
   if (!productStore.categories.length) {
     await productStore.getProductCategories()
+    await productStore.getProductBrands()
   }
 })
 const headers = authHeader()
 const productStore = useProductStore()
 const productForm = reactive({
+  category: 'Выберите категорию',
+  brand: 'Выберите брэнд',
   name: '',
-  code: '',
-  ean: '',
-  category_id: 'Category',
-  price: null,
-  rrp: null,
-  stock: null,
-  next_delivery_date: null,
-  unit_measure: '',
-  quantity_pack: '',
-  shelf_life: null,
-  alc_vol: null,
-  unit_size: null,
-  country: '',
+  in_stock: true,
+  price: '',
+  engine: '',
+  vehicles_year: '',
+  transmission: '',
+  max_weight: '',
+  cabin_type: '',
+  suspension_type: '',
+  suspension_cabin: '',
+  suspension_chassis: '',
+  brake_type: '',
+  wheel_formula: '',
+  axles_number: '',
+  fifth_wheel_height: '',
+  trailer_volume: '',
+  trailer_length: '',
+  euro: '',
+  color: '',
+  options: '',
   image_url: '',
-  status:'draft'
 })
 const errors = reactive({
   name: false,
   price: false,
   category_id: false,
-  stock: false
+  brand: false
 })
-const oldPrice = ref(null)
+
 const fileList = ref([])
-const isVatAdded = ref(false)
-watch(
-  () => productForm.price,
-  (val) => {
-    isVatAdded.value = false
-  }
-)
-const addVat = () => {
-  if (!productForm.price) {
-    message.error('Set price')
-    return
-  }
-  if (!isVatAdded.value) {
-    oldPrice.value = productForm.price
-    productForm.price = (productForm.price * 1.2).toFixed(2)
-    setTimeout(() => {
-      isVatAdded.value = true
-    }, 100)
-    return
-  }
-  if (isVatAdded.value) {
-    productForm.price = oldPrice.value
-    isVatAdded.value = false
-    return
-  }
-}
+
 const validateForm = () => {
   if (
     !productForm.name ||
     !productForm.price ||
-    productForm.category_id == 'Category' ||
-    !productForm.stock
+    productForm.category == 'Выберите категорию' ||
+    productForm.brand == 'Выберите брэнд'
   ) {
     message.error(
-      `${!productForm ? 'Name' : ''}${!productForm.price ? 'Price' : ''} ${productForm.category_id == 'Category' ? ' Category' : ''
-      }${!productForm.stock ? ' Stock' : ''} is required`
+      `${!productForm.name ? 'Название ' : ''}${!productForm.price ? 'Цена ' : ''} ${productForm.category == 'Выберите категорию' ? 'Категория' : ''
+      }${productForm.brand == 'Выберите брэнд' ? ' Брэнд' : ''} обязательные поля`
     )
 
     errors.price = !productForm.price
     errors.name = !productForm.name
-    errors.category_id = productForm.category_id == 'Category'
-    errors.stock = !productForm.stock
+    errors.category_id = productForm.category == 'Выберите категорию'
+    errors.brand = !productForm.brand
     setTimeout(() => {
       errors.price = false
       errors.name = false
-      errors.stock = false
+      errors.brand = false
       errors.category_id = false
     }, 2600)
 
@@ -103,14 +87,15 @@ const validateForm = () => {
   return true
 }
 
-const createProduct = async (status: 'published' | 'draft') => {
+const createProduct = async () => {
   try {
     if (!validateForm()) return
-    
-    productForm.status = status
-    console.log({productStore})
+
+
+    console.log({ productStore })
     await productStore.createProduct(productForm)
     message.success('Product created successfully')
+    router.push({ name: 'products' })
     // closeModal(true)
   } catch (e: any) {
     console.log(e)
@@ -122,80 +107,95 @@ const handleChange = (info: UploadChangeParam) => {
 
   if (info.file.status === 'done') {
     message.success(`${info.file.name} file uploaded successfully`)
-    productForm.image_url = `${API_URL}/upload/`+ info.file.response?.data
+    productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
   } else if (info.file.status === 'error') {
     message.error(`${info.file.name} file upload failed.`);
   }
 };
 </script>
 <template>
-  <div class="w-full max-h-full flex text-black p-4  flex-col-reverse lg:flex-row overflow-y-auto overflow-x-hidden gap-4">
+  <div
+    class="w-full max-h-full flex text-black p-4  flex-col-reverse lg:flex-row overflow-y-auto overflow-x-hidden gap-4">
     <div class="md:w-[60%] w-full rounded-lg bg-white h-full flex flex-col items-start p-6 gap-4">
-      <p class="title">New Inventory Item</p>
+      <p class="title">Новый продукт</p>
       <!-- <p class="text-black">{{ fileList }}</p> -->
       <div class="w-full flex gap-12">
         <div class="flex flex-col w-[45%] gap-6 text-black">
           <input type="text" v-model="productForm.name" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Product Name" :class="{ 'border border-red-500 ': errors.name }" />
-          <input type="text" v-model="productForm.ean" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="EAN" />
-          <input type="text" v-model="productForm.code" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="CODE" />
+            placeholder="Название" :class="{ 'border border-red-500 ': errors.name }" />
+          <input type="text" v-model="productForm.vehicles_year" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Год выпуска" />
+          <input type="text" v-model="productForm.engine" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Двигатель" />
+          <input type="text" v-model="productForm.transmission" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Коробка передач" />
 
-          <select name="select" v-model="productForm.category_id"
+          <select name="select" v-model="productForm.category"
             class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999] text-black text-md"
             :class="{ 'border border-red-500 ': errors.category_id }">
-            <option selected disabled>Category</option>
+            <option selected disabled>Категория</option>
 
             <option class="bg-[#EFF1F999] text-black" v-for="(category, index) in productStore.categories" :key="index"
-              :value="category.id">
-              {{ category.name }}
+              :value="category">
+              {{ category }}
             </option>
           </select>
-          <div class="w-full flex gap-4">
+          <select name="select" v-model="productForm.brand"
+            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999] text-black text-md"
+            :class="{ 'border border-red-500 ': errors.category_id }">
+            <option selected disabled>Брэнд</option>
+
+            <option class="bg-[#EFF1F999] text-black" v-for="(category, index) in productStore.brands" :key="index"
+              :value="category">
+              {{ category }}
+            </option>
+          </select>
+          <div class="w-full flex gap-4 items-start">
             <input type="number" v-model="productForm.price" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-              placeholder="Price (Unit)" :class="{ 'border border-red-500 ': errors.price }" />
-            <input type="text" v-model="productForm.rrp" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-              placeholder="RRP" />
-          </div>
-          <div class="w-full flex justify-between items-center">
-            <p class="leading-[100%] text-gray-400">VAT (20%)</p>
-            <div class="flex gap-2 cursor-pointer" @click="addVat">
-              <p class="leading-[100%] text-gray-400">Add</p>
-              <div class="rounded-full w-[1rem] h-[1rem]"
-                :class="{ 'bg-green-500': isVatAdded == true, 'bg-red-500': isVatAdded !== true }"></div>
+              placeholder="Цена" :class="{ 'border border-red-500 ': errors.price }" />
+            <div class="leading-normal flex">
+              <input type="checkbox" v-model="productForm.in_stock"
+                class="rounded-md w-full h-[1rem] px-4 bg-[#EFF1F999]" label="В наличие"
+                :class="{ 'border border-red-500 ': errors.stock }" />
+              <p class="text-sm mt-[-4px]">Товар в наличие</p>
             </div>
+
           </div>
-          <input type="number" min="1" max="1000" v-model="productForm.stock"
-            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Stock"
-            :class="{ 'border border-red-500 ': errors.stock }" />
-          <div class="flex flex-col w-full items-start gap-4">
-            <p class="leading-[100%] text-gray-400 text-sm">Next delivery date</p>
-            <a-date-picker v-model:value="productForm.next_delivery_date" :format="dateFormat" />
-          </div>
+          <input type="text" v-model="productForm.max_weight" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Разрешённая макс. масса" :class="{ 'border border-red-500 ': errors.stock }" />
+          <input type="text" v-model="productForm.euro" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Класс выхлопа EURO" :class="{ 'border border-red-500 ': errors.stock }" />
+          <input type="text" v-model="productForm.color" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Цвет" :class="{ 'border border-red-500 ': errors.stock }" />
+
         </div>
         <div class="flex flex-col w-[45%] gap-6 text-black h-full">
-          <input type="text" v-model="productForm.unit_measure" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Unit of Measure" />
-          <input type="text" v-model="productForm.quantity_pack" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Quantity in a pack" />
-          <input type="text" v-model="productForm.shelf_life" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Shelf Life" />
-          <input type="text" v-model="productForm.alc_vol" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Alc. Vol. (%)" />
-          <input type="number" v-model="productForm.unit_size" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Unit Size (L)" />
-          <input type="text" v-model="productForm.country" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Country" />
+          <input type="text" v-model="productForm.cabin_type" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Тип кабины" />
+          <input type="text" v-model="productForm.suspension_type"
+            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Тип подвески" />
+          <input type="text" v-model="productForm.suspension_cabin"
+            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Подвеска кабины" />
+          <input type="text" v-model="productForm.suspension_chassis"
+            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Подвеска шасси" />
+          <input type="text" v-model="productForm.brake_type" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Тип тормозов" />
+          <input type="text" v-model="productForm.wheel_formula" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Колесная формула" />
+          <input type="text" v-model="productForm.axles_number" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Количество осей" />
+          <input type="text" v-model="productForm.fifth_wheel_height"
+            class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Высота седельного устройства" />
+          <input type="text" v-model="productForm.trailer_volume" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Объем прицепа" />
+          <input type="text" v-model="productForm.trailer_length" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Длина прицепа" />
           <div class="w-full flex items-end gap-6 justfy-self-end self-endh-full flex-col lg:flex-row">
-            <button class="lg:px-8 px-4 w-fit py-3 bg-[#DCDCDC] text-gray-500 rounded-xl leading-[100%] text-[14px] hover:opacity-75"
-              @click="createProduct('draft')">
-              Save as Draft
-            </button>
+
             <button
               class="lg:px-8 px-4 w-fit py-3 bg-[#c40f30] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
-              @click="createProduct('published')">
-              Save & Publish
+              @click="createProduct()">
+              Создать
             </button>
           </div>
         </div>

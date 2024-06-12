@@ -11,7 +11,7 @@ export interface SortQueryParamDto {
 }
 export interface Sorting {
     property: string
-    direction: 'ASC' | 'DESC'
+    direction: 'asc' | 'desc'
 }
 
 export const SortingParams = createParamDecorator(

@@ -11,6 +11,7 @@ async function bootstrap() {
             transform: true,
         })
     )
+    app.setGlobalPrefix('api')
     const config = new DocumentBuilder()
         .setTitle('AUTOPARTNER-API')
         .setDescription('The API description')
@@ -18,6 +19,16 @@ async function bootstrap() {
         .build()
     const document = SwaggerModule.createDocument(app, config)
     SwaggerModule.setup('doc', app, document)
-    await app.listen(4000)
+    app.enableCors({
+        origin: [
+            'http://5.35.90.180/',
+            'http://localhost:4000',
+            'http://localhost',
+            'http://0.0.0.0',
+        ],
+        credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    })
+    await app.listen(3000)
 }
 bootstrap()

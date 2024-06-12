@@ -2,69 +2,80 @@ import ProductService from '@/services/product.service'
 import { defineStore } from 'pinia'
 import type { Iparams } from '@/interfaces/params.interface'
 export interface IProduct {
-    id?: number
-    name: string
-    country: string
-    price: number
-    rrp: number
-    stock: number
-    discount?: number
-    shelf_life: number
-    unit_size: number
-    quantity_pack: string
-    unit_measure: string
-    category_id: number
-    category?: string
-    image_url: string
-    alc_vol: string
-    ean: string
-    code: string
-    status: 'draft' | 'published'
-    created_at?: string
-    updated_at?: string
+  id?: number
+  account_id?: number
+  category: string
+  brand: string
+  name: string
+  in_stock: boolean
+  price: number
+  engine?: string
+  vehicles_year?: string
+  transmission?: string
+  max_weight?: string
+  cabin_type?: string
+  suspension_type?: string
+  suspension_cabin?: string
+  suspension_chassis?: string
+  brake_type?: string
+  wheel_formula?: string
+  axles_number?: string
+  fifth_wheel_height?: string
+  trailer_length?: string
+  euro?: string
+  color?: string
+  options?: string
+  image_url?: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface IProductCategory {
-    id: number
-    name: string
+  name: string
 }
 
 export const useProductStore = defineStore({
-    id: 'products',
-    state: () => ({
-        products: [] as IProduct[] | [],
-        product: {} as IProduct,
-        total: 0,
-        categories: [] as IProductCategory[] | [],
-        inStock: 0 as number,
-        outOfStock: 0 as number,
-    }),
-    actions: {
-        async getProducts(params: Iparams): Promise<void> {
-            const data: { items: IProduct[] | []; total: number } = await ProductService.getProducts(params)
-            this.products = data.items
-            this.total = data.total
-            this.inStock = this.products.filter(i => i.stock > 0).length
-            this.outOfStock = this.products.filter(i => i.stock < 1).length
-        },
-        async getProduct(id: number): Promise<void> {
-            const data:IProduct = await ProductService.getProduct(id)
-            this.product = data
-           
-        },
-        async getProductCategories() {
-            const data = await ProductService.getProductCategories()
-            this.categories = data
-        },
-        async createProduct(product: IProduct) {
-            const data = await ProductService.createProduct(product)
-        },
-        async updateProduct(product: IProduct) {
-            const data = await ProductService.updateProduct(product)
-        },
-        async uploadImage(file: File) {
-            const data = await ProductService.uploadImage(file)
-        }
-    }
-
+  id: 'products',
+  state: () => ({
+    products: [] as IProduct[] | [],
+    product: {} as IProduct,
+    total: 0,
+    categories: [] as string[] | [],
+    brands: [] as string[] | [],
+  }),
+  actions: {
+    async getProducts(params: Iparams): Promise<void> {
+      const data = await ProductService.getProducts(params)
+      console.log({ data })
+      this.products = data.data
+      this.total = data.meta.itemCount
+      //   this.inStock = this.products.filter((i) => i.stock > 0).length
+      //   this.outOfStock = this.products.filter((i) => i.stock < 1).length
+    },
+    async getProduct(id: number): Promise<void> {
+      const data: IProduct = await ProductService.getProduct(id)
+      this.product = data
+    },
+    async getProductCategories() {
+      const data: IProductCategory[] =
+        await ProductService.getProductCategories()
+      this.categories = data.map((i) => i.name)
+    },
+    async getProductBrands() {
+      const data: IProductCategory[] = await ProductService.getProductBrands()
+      this.brands = data.map((i) => i.name)
+    },
+    async createProduct(product: IProduct) {
+      const data = await ProductService.createProduct(product)
+    },
+    async updateProduct(product: IProduct) {
+      const data = await ProductService.updateProduct(product)
+    },
+    async deleteProduct(product: IProduct) {
+      const data = await ProductService.deleteProduct(product)
+    },
+    async uploadImage(file: File) {
+      const data = await ProductService.uploadImage(file)
+    },
+  },
 })
