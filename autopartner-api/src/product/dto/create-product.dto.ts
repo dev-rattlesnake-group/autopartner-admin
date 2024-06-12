@@ -100,6 +100,11 @@ export class CreateProductDto {
     @ApiProperty()
     @IsOptional()
     @IsString()
+    trailer_volume?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString()
     color?: string
 
     @ApiProperty()

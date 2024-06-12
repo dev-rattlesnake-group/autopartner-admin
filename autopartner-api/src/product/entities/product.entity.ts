@@ -30,6 +30,7 @@ export type ProductCreateType = {
     axles_number?: string
     fifth_wheel_height?: string
     trailer_length?: string
+    trailer_volume?: string
     euro?: string
     color?: string
     options?: string
@@ -97,6 +98,9 @@ export class Products extends BaseEntity {
 
     @Column({ type: 'varchar', nullable: true })
     trailer_length?: string
+
+    @Column({ type: 'varchar', nullable: true })
+    trailer_volume?: string
 
     @Column({ type: 'varchar', nullable: true })
     euro?: string
