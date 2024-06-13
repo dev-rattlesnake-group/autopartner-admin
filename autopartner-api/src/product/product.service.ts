@@ -50,7 +50,27 @@ export class ProductService {
     async getCategories(): Promise<Categories[]> {
         return await this.categoryRepository.find()
     }
+    async createCategory(category: string): Promise<Categories> {
+        return this.categoryRepository.save({ name: category })
+    }
+
+    async updateCategory(name: string, category: string) {
+        return await this.categoryRepository.updateCategory(name, category)
+    }
     async getBrands(): Promise<Brands[]> {
         return this.brandRepository.find()
+    }
+    async deleteCategory(name: string) {
+        return await this.categoryRepository.deleteCategory(name)
+    }
+
+    async updateBrand(name: string, brand: string) {
+        return await this.brandRepository.updateBrand(name, brand)
+    }
+    async createBrand(brand: string): Promise<Brands> {
+        return this.brandRepository.save({ name: brand })
+    }
+    async deleteBrand(name: string) {
+        return await this.brandRepository.deleteBrand(name)
     }
 }

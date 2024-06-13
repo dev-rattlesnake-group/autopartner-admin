@@ -74,6 +74,18 @@ export const useProductStore = defineStore({
     async deleteProduct(product: IProduct) {
       const data = await ProductService.deleteProduct(product)
     },
+    async createCategory(category: string) {
+      const data = await ProductService.createProductCategories(category)
+    },
+    async updateCategory(category: string, newCategory: string) {
+      const data = await ProductService.updateProductCategories(
+        category,
+        newCategory
+      )
+    },
+    async deleteCategory(category: string) {
+      const data = await ProductService.deleteProductCategories(category)
+    },
     async uploadImage(file: File) {
       const data = await ProductService.uploadImage(file)
     },

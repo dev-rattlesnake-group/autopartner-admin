@@ -17,33 +17,38 @@ const state = reactive({
   sort: { field: 'id', order: 'desc' }
 })
 
+const openCategoryModal = ref(false)
+const newCategory = ref('')
+const selectedCategory = ref('')
+const modalMode = ref('')
+
 const selectedFilterCategory = ref('All')
 const openCreateModal = ref(false)
 const emit = defineEmits(['header-data'])
 
-const handleFilter = async (e: string) => {
-  selectedFilterCategory.value = e
-  if (e == 'All') {
-    delete state.filters?.category
-  } else {
-    state.filters['category'] = e
-  }
+// const handleFilter = async (e: string) => {
+//   selectedFilterCategory.value = e
+//   if (e == 'All') {
+//     delete state.filters?.category
+//   } else {
+//     state.filters['category'] = e
+//   }
 
-  const params: Iparams = {
-    filter: state.filters,
-    page: state.page,
-    take: state.size,
-    sort: state.sort
-  }
-  await productStore.getProducts(params)
-  emit('header-data', {
-    title: 'Products',
-    crumbs: [
-      { name: 'Products', route: 'products' },
-      { name: selectedFilterCategory.value, route: 'products' }
-    ]
-  })
-}
+//   const params: Iparams = {
+//     filter: state.filters,
+//     page: state.page,
+//     take: state.size,
+//     sort: state.sort
+//   }
+//   await productStore.getProducts(params)
+//   emit('header-data', {
+//     title: 'Products',
+//     crumbs: [
+//       { name: 'Products', route: 'products' },
+//       { name: selectedFilterCategory.value, route: 'products' }
+//     ]
+//   })
+// }
 
 const isLoading = ref(false)
 
@@ -483,10 +488,45 @@ watch(
     await productStore.getProducts(params)
   }
 )
+const confirm = async (name: string) => {
+  await productStore.deleteCategory(name)
+  await productStore.getProductCategories()
+  message.success('Ресурс удален');
+};
+
+const createCategory = async () => {
+  if (modalMode.value == 'update') {
+    console.log(selectedCategory.value, newCategory.value)
+    await productStore.updateCategory(selectedCategory.value, newCategory.value)
+    await productStore.getProductCategories()
+
+  } else {
+    await productStore.createCategory(newCategory.value)
+    await productStore.getProductCategories()
+
+  }
+  modalMode.value = ''
+  message.success('Ресурс создан')
+  openCategoryModal.value = false
+};
+const openCategoryModalCreate = () => {
+  selectedCategory.value = ''
+  newCategory.value = ''
+  modalMode.value = ''
+  openCategoryModal.value = true
+}
+const openUpdateCategory = async (category: string) => {
+  selectedCategory.value = category
+  newCategory.value = category
+  modalMode.value = 'update'
+  console.log(selectedCategory.value, newCategory.value)
+  openCategoryModal.value = true
+
+}
 </script>
 <template>
   <div class="customers-wrapper">
-    <CustomerCreateComponent :open="openCreateModal" @close="closeCreateModal" />
+    <CustomerCreateComponent :open="openCreateModal = true" @close="closeCreateModal" />
     <!-- <div class="customer-panels flex flex-col lg:flex-row">
       <div class="customer-panels_all w-full lg:w-[45%] bg-[#C40F30] text-white">
         <div class="flex items-center w-full justify-between max-h-[50%] mb-[2rem]">
@@ -576,6 +616,40 @@ watch(
         </button>
       </div>
     </div> -->
+    <a-modal v-model:open="openCategoryModal" title="Введите название категории" @ok="createCategory">
+      <div class="w-full flex flex-col gap-4">
+
+        <input type="text" v-model="newCategory" class="border-black rounded-md border p-2" />
+      </div>
+      <template #footer>
+        <a-button key="back" @click="openCategoryModal = false">Отмена</a-button>
+        <a-button @click="createCategory">Создать</a-button>
+      </template>
+    </a-modal>
+    <div class="w-[20rem] min-h-[10rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
+      <p class="text-lg font-semibold">Категории</p>
+      <div class="w-full h-fit flex flex-col items-start px-4">
+        <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.categories" :key="ind">
+          <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
+          <div class="flex gap-4">
+            <button @click="openUpdateCategory(category)"
+              class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
+            </button>
+            <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
+              @confirm="confirm(category)" @cancel="cancel">
+              <button
+                class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
+              </button>
+            </a-popconfirm>
+
+          </div>
+        </div>
+
+      </div>
+      <button @click="openCategoryModalCreate"
+        class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
+        категорию</button>
+    </div>
     <div class=" w-full  flex flex-col gap-4 ml-4 items-end px-4 lg:px-4 ">
       <button class="cutomer-header_btn bg-[#c40f30] w-fit px-4 text-white" @click="handleCreateProduct">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -836,7 +910,7 @@ watch(
           height: 2rem;
           border-radius: 4px;
           border: 1px solid var(--Black-50, #53545c);
-          background: #fff;
+
 
           &:hover {
             // background: rgba(94, 99, 102, 0.08);

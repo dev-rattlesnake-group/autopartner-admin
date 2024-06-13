@@ -34,15 +34,13 @@ import { PageOptionsDto } from 'src/dto/page-options.dto'
 import { ProductService } from './product.service'
 import { ProductCreateType, Products } from './entities/product.entity'
 import { CreateProductDto } from './dto/create-product.dto'
-import { FileInterceptor } from '@nestjs/platform-express'
 import { FileTypeValidationPipe } from 'src/pipe/file-type-validation.pipe'
-import { ApiConsumes } from '@nestjs/swagger'
-import { generateFileName } from './helper/generate-filename.helper'
 import { ConfigService } from '@nestjs/config'
-import { diskStorage } from 'multer'
 import { Categories } from './entities/product-category.entity'
 import { Brands } from './entities/product-brand.entity'
 import { PRODUCT_FILTER_PARAMS } from './product.constant'
+import { CreateCategoryDto } from './dto/create-category.dto'
+import { CreateBrandDto } from './dto/create-brand.dto'
 @Controller('products')
 export class ProductController {
     constructor(
@@ -71,9 +69,96 @@ export class ProductController {
         return this.productService.getCategories()
     }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Post('categories')
+    async createCategory(@Body() dto: CreateCategoryDto): Promise<Categories> {
+        return this.productService.createCategory(dto.name)
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Put('categories/:name')
+    async updateCategoriy(
+        @Body() dto: CreateCategoryDto,
+        @Param() { name }: { name: string }
+    ) {
+        try {
+            return this.productService.updateCategory(name, dto.name)
+        } catch (err) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: err?.message || err?.details || err,
+                },
+                HttpStatus.BAD_REQUEST,
+                {
+                    cause: err,
+                }
+            )
+        }
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Delete('categories/:name')
+    async deleteCategory(@Param() { name }: { name: string }) {
+        try {
+            return await this.productService.deleteCategory(name)
+        } catch (err) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: err?.message || err?.details || err,
+                },
+                HttpStatus.BAD_REQUEST,
+                {
+                    cause: err,
+                }
+            )
+        }
+    }
+
     @Get('brands')
     async getBrands(): Promise<Brands[]> {
         return this.productService.getBrands()
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Post('brands')
+    async createBrand(@Body() dto: CreateBrandDto): Promise<Categories> {
+        return this.productService.createBrand(dto.name)
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Put('brands/:name')
+    async updateBrand(
+        @Param() { name }: { name: string },
+        @Body() dto: CreateBrandDto
+    ) {
+        return this.productService.updateBrand(name, dto.name)
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Delete('brands/:name')
+    async deleteBrand(@Param() { name }: { name: string }) {
+        try {
+            return await this.productService.deleteBrand(name)
+        } catch (err) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: err?.message || err?.details || err,
+                },
+                HttpStatus.BAD_REQUEST,
+                {
+                    cause: err,
+                }
+            )
+        }
     }
 
     @Get(':id')
@@ -112,18 +197,12 @@ export class ProductController {
     @Roles(Role.Admin)
     @Put(':id')
     async updateProduct(
-        @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
-        file: Express.Multer.File,
         @Param() id: { id: number },
         @Body() dto: CreateProductDto,
         @RequestUser() user: RequestAccount
     ) {
         try {
             const createProductDto = structuredClone(dto) as ProductCreateType
-            if (file) {
-                console.log(file)
-                createProductDto.image_url = `${this.configService.get('API_URL')}/files/${file.filename}`
-            }
             createProductDto.account_id = user.id
             const product = await this.productService.updateProduct(
                 createProductDto,

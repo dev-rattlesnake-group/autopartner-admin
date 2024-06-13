@@ -80,11 +80,68 @@ export default new (class ProductService {
       throw error
     }
   }
+
+  async createProductCategories(productDto: string) {
+    try {
+      const { data } = await axios.post(
+        API_URL + '/products/categories',
+        { name: productDto },
+        {
+          headers: authHeader(),
+        }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+
+  async updateProductCategories(category: string, newCategory: string) {
+    console.log({ category, newCategory })
+    try {
+      const { data } = await axios.put(
+        API_URL + '/products/categories/' + category,
+        { name: newCategory },
+        { headers: authHeader() }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+  async deleteProductCategories(productDto: string) {
+    try {
+      const { data } = await axios.delete(
+        API_URL + '/products/categories/' + productDto,
+        { headers: authHeader() }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+
   async getProductBrands(): Promise<IProductCategory[]> {
     try {
       const { data } = await axios.get(API_URL + '/products/brands', {
         headers: authHeader(),
       })
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+
+  async deleteProductBrand(productDto: string) {
+    try {
+      const { data } = await axios.delete(
+        API_URL + '/products/brands/' + productDto,
+        { headers: authHeader() }
+      )
       return data
     } catch (error) {
       console.log({ error })
