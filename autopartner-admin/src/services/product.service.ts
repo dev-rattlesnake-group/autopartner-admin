@@ -136,6 +136,36 @@ export default new (class ProductService {
     }
   }
 
+  async createProductBrand(productDto: string) {
+    try {
+      const { data } = await axios.post(
+        API_URL + '/products/brands',
+        { name: productDto },
+        {
+          headers: authHeader(),
+        }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+  async updateProductBrand(category: string, newCategory: string) {
+    console.log({ category, newCategory })
+    try {
+      const { data } = await axios.put(
+        API_URL + '/products/brands/' + category,
+        { name: newCategory },
+        { headers: authHeader() }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+
   async deleteProductBrand(productDto: string) {
     try {
       const { data } = await axios.delete(

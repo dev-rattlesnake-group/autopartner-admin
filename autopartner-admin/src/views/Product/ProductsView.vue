@@ -21,6 +21,10 @@ const openCategoryModal = ref(false)
 const newCategory = ref('')
 const selectedCategory = ref('')
 const modalMode = ref('')
+const openBrandModal = ref(false)
+const newBrand = ref('')
+const selectedBrand = ref('')
+const modalBrandMode = ref('')
 
 const selectedFilterCategory = ref('All')
 const openCreateModal = ref(false)
@@ -493,6 +497,11 @@ const confirm = async (name: string) => {
   await productStore.getProductCategories()
   message.success('Ресурс удален');
 };
+const confirmBrand = async (name: string) => {
+  await productStore.deleteBrand(name)
+  await productStore.getProductBrands()
+  message.success('Ресурс удален');
+};
 
 const createCategory = async () => {
   if (modalMode.value == 'update') {
@@ -509,19 +518,48 @@ const createCategory = async () => {
   message.success('Ресурс создан')
   openCategoryModal.value = false
 };
+const createBrand = async () => {
+  if (modalBrandMode.value == 'update') {
+
+    await productStore.updateBrand(selectedBrand.value, newBrand.value)
+    await productStore.getProductBrands()
+
+  } else {
+    await productStore.createBrand(newBrand.value)
+    await productStore.getProductBrands()
+
+  }
+  modalMode.value = ''
+  message.success('Ресурс создан')
+  openBrandModal.value = false
+};
 const openCategoryModalCreate = () => {
   selectedCategory.value = ''
   newCategory.value = ''
   modalMode.value = ''
   openCategoryModal.value = true
 }
+const openBrandModalCreate = () => {
+  selectedBrand.value = ''
+  newBrand.value = ''
+  modalBrandMode.value = ''
+  openBrandModal.value = true
+}
+
+
 const openUpdateCategory = async (category: string) => {
   selectedCategory.value = category
   newCategory.value = category
   modalMode.value = 'update'
   console.log(selectedCategory.value, newCategory.value)
   openCategoryModal.value = true
+}
+const openUpdateBrand = async (category: string) => {
+  selectedBrand.value = category
+  newBrand.value = category
+  modalBrandMode.value = 'update'
 
+  openBrandModal.value = true
 }
 </script>
 <template>
@@ -616,7 +654,7 @@ const openUpdateCategory = async (category: string) => {
         </button>
       </div>
     </div> -->
-    <a-modal v-model:open="openCategoryModal" title="Введите название категории" @ok="createCategory">
+    <a-modal v-model:open="openCategoryModal" title="Введите название категории">
       <div class="w-full flex flex-col gap-4">
 
         <input type="text" v-model="newCategory" class="border-black rounded-md border p-2" />
@@ -626,29 +664,66 @@ const openUpdateCategory = async (category: string) => {
         <a-button @click="createCategory">Создать</a-button>
       </template>
     </a-modal>
-    <div class="w-[20rem] min-h-[10rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
-      <p class="text-lg font-semibold">Категории</p>
-      <div class="w-full h-fit flex flex-col items-start px-4">
-        <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.categories" :key="ind">
-          <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
-          <div class="flex gap-4">
-            <button @click="openUpdateCategory(category)"
-              class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
-            </button>
-            <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
-              @confirm="confirm(category)" @cancel="cancel">
-              <button
-                class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
-              </button>
-            </a-popconfirm>
+    <a-modal v-model:open="openBrandModal" title="Введите название брэнда">
+      <div class="w-full flex flex-col gap-4">
 
-          </div>
-        </div>
-
+        <input type="text" v-model="newBrand" class="border-black rounded-md border p-2" />
       </div>
-      <button @click="openCategoryModalCreate"
-        class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
-        категорию</button>
+      <template #footer>
+        <a-button key="back" @click="openBrandModal = false">Отмена</a-button>
+        <a-button @click="createBrand">Создать</a-button>
+      </template>
+    </a-modal>
+    <div class="flex gap-4">
+      <div class="w-[20rem] h-[14rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
+        <p class="text-lg font-semibold">Категории</p>
+        <div class="w-full h-fit flex flex-col items-start px-4 max-h-[12rem] overflow-y-auto ">
+          <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.categories"
+            :key="ind">
+            <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
+            <div class="flex gap-4">
+              <button @click="openUpdateCategory(category)"
+                class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
+              </button>
+              <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
+                @confirm="confirm(category)" @cancel="cancel">
+                <button
+                  class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
+                </button>
+              </a-popconfirm>
+
+            </div>
+          </div>
+
+        </div>
+        <button @click="openCategoryModalCreate"
+          class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
+          категорию</button>
+      </div>
+      <div class="w-[20rem] h-[14rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
+        <p class="text-lg font-semibold">Брэнды</p>
+        <div class="w-full h-fit flex flex-col items-start px-4 max-h-[12rem] overflow-y-auto ">
+          <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.brands" :key="ind">
+            <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
+            <div class="flex gap-4">
+              <button @click="openUpdateBrand(category)"
+                class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
+              </button>
+              <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
+                @confirm="confirmBrand(category)">
+                <button
+                  class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
+                </button>
+              </a-popconfirm>
+
+            </div>
+          </div>
+
+        </div>
+        <button @click="openBrandModalCreate"
+          class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
+          брэнд</button>
+      </div>
     </div>
     <div class=" w-full  flex flex-col gap-4 ml-4 items-end px-4 lg:px-4 ">
       <button class="cutomer-header_btn bg-[#c40f30] w-fit px-4 text-white" @click="handleCreateProduct">
@@ -656,7 +731,7 @@ const openUpdateCategory = async (category: string) => {
           <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        Создать
+        Создать продукт
       </button>
 
     </div>
