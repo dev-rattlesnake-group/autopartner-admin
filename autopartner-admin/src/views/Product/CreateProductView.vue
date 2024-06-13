@@ -150,24 +150,25 @@ const handleChange = (info: UploadChangeParam) => {
               {{ category }}
             </option>
           </select>
-          <div class="w-full flex gap-4 items-start">
+          <div class="w-full flex gap-4 items-start leading-normal">
             <input type="number" v-model="productForm.price" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
               placeholder="Цена" :class="{ 'border border-red-500 ': errors.price }" />
             <div class="leading-normal flex">
               <input type="checkbox" v-model="productForm.in_stock"
-                class="rounded-md w-full h-[1rem] px-4 bg-[#EFF1F999]" label="В наличие"
-                :class="{ 'border border-red-500 ': errors.stock }" />
+                class="rounded-md w-full h-[1rem] px-4 bg-[#EFF1F999]" label="В наличие" />
+
               <p class="text-sm mt-[-4px]">Товар в наличие</p>
             </div>
 
           </div>
           <input type="text" v-model="productForm.max_weight" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Разрешённая макс. масса" :class="{ 'border border-red-500 ': errors.stock }" />
+            placeholder="Разрешённая макс. масса" />
           <input type="text" v-model="productForm.euro" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Класс выхлопа EURO" :class="{ 'border border-red-500 ': errors.stock }" />
+            placeholder="Класс выхлопа EURO" />
           <input type="text" v-model="productForm.color" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-            placeholder="Цвет" :class="{ 'border border-red-500 ': errors.stock }" />
-
+            placeholder="Цвет" />
+          <input v-model="productForm.options" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
+            placeholder="Доп информация" />
         </div>
         <div class="flex flex-col w-[45%] gap-6 text-black h-full">
           <input type="text" v-model="productForm.cabin_type" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
@@ -202,8 +203,8 @@ const handleChange = (info: UploadChangeParam) => {
       </div>
     </div>
     <div class="md:w-[39%] w-full rounded-lg bg-white h-full flex flex-col p-6">
-      <a-upload-dragger v-model:fileList="fileList" name="file" :multiple="false" :action="`${API_URL}/upload/image`"
-        :headers="headers" @change="handleChange">
+      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="false"
+        :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
         <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
           <BulkIcon class="mt-[4rem]" />
           <p class="upload-text text-xl font-semibold text-[#c40f30] mt-4">Upload Image</p>

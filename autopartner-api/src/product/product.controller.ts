@@ -42,7 +42,7 @@ import { ConfigService } from '@nestjs/config'
 import { diskStorage } from 'multer'
 import { Categories } from './entities/product-category.entity'
 import { Brands } from './entities/product-brand.entity'
-
+import { PRODUCT_FILTER_PARAMS } from './product.constant'
 @Controller('products')
 export class ProductController {
     constructor(
@@ -52,10 +52,10 @@ export class ProductController {
     @Get()
     async getAll(
         @Query() pageOptionsDto: PageOptionsDto,
-        @FilteringParams([])
+        @FilteringParams(PRODUCT_FILTER_PARAMS)
         filterParams?: Filtering,
         @SearchingParams() searchParams?: string,
-        @SortingParams(['id'])
+        @SortingParams(PRODUCT_FILTER_PARAMS)
         sortParams?: Sorting
     ): Promise<PageDto<Products>> {
         return this.productService.getProducts(

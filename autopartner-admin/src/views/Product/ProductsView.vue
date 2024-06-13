@@ -103,6 +103,17 @@ const columns = ref<Record<string, any>[]>([
     // filteredValue: state.filters?.phone || null
   },
   {
+    title: 'Цена',
+    dataIndex: 'price',
+    key: 'price',
+    resizable: true,
+    filterSearch: true,
+    sortDirections: ['desc', 'asc'],
+    sorter: true,
+    width: 120
+    // filteredValue: state.filters?.created_at || null
+  },
+  {
     title: 'Двигатель',
     dataIndex: 'engine',
     key: 'engine',
@@ -229,17 +240,7 @@ const columns = ref<Record<string, any>[]>([
     width: 50
     // filteredValue: state.filters?.status_id || null
   },
-  {
-    title: 'Цена',
-    dataIndex: 'price',
-    key: 'price',
-    resizable: true,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true,
-    width: 120
-    // filteredValue: state.filters?.created_at || null
-  }
+
 ])
 
 const columnsMobile = ref([
@@ -255,19 +256,19 @@ const columnsMobile = ref([
     // filteredValue: state.filters?.id || null
   },
   {
-    title: 'Product Name',
+    title: 'Название',
     dataIndex: 'name',
     key: 'name',
     resizable: true,
     filterSearch: true,
     sortDirections: ['desc', 'asc'],
     sorter: true,
-    width: 80
+    width: 50
     // fixed: 'left',
   },
   {
-    title: 'Category',
-    dataIndex: 'category_id',
+    title: 'Категория',
+    dataIndex: 'category',
     key: 'category_id',
     resizable: true,
     sortDirections: ['desc', 'asc'],
@@ -277,80 +278,118 @@ const columnsMobile = ref([
 
     // filteredValue: state.filters?.company || null
   },
-  // {
-  //   title: 'Unit Size (L)',
-  //   dataIndex: 'unit_size',
-  //   key: 'unit_size',
-  //   resizable: true,
-  //   sortDirections: ['desc', 'asc'],
-  //   sorter: true,
-  //   filterSearch: true,
-  //   width: 100
-  //   // filteredValue: state.filters?.email || null
-  // },
-  // {
-  //   title: 'Qt',
-  //   dataIndex: 'quantity_pack',
-  //   key: 'quantity_pack',
-  //   resizable: true,
-  //   filterSearch: true,
-  //   width: 100
-  //   // filteredValue: state.filters?.phone || null
-  // },
-  // {
-  //   title: 'Stock (Unit)',
-  //   dataIndex: 'stock',
-  //   key: 'stock',
-  //   resizable: true,
-  //   filterSearch: true,
-  //   width: 50
-  //   // filteredValue: state.filters?.phone || null
-  // },
-  // {
-  //   title: 'Shelf life',
-  //   dataIndex: 'shelf_life',
-  //   key: 'shelf_life',
-  //   resizable: true,
-  //   filterSearch: true,
-  //   sorter: true,
-  //   sortDirections: ['desc', 'asc'],
-  //   width: 100
-  //   // filteredValue: state.filters?.all_orders || null
-  // },
-  // {
-  //   title: 'Discount',
-  //   dataIndex: 'discount',
-  //   key: 'discount',
-  //   resizable: true,
-  //   filterSearch: true,
-  //   sortDirections: ['desc', 'asc'],
-  //   sorter: true,
-  //   width: 80
-
-  //   // filteredValue: state.filters?.order_total || null
-  // },
-  // {
-  //   title: 'Status',
-  //   dataIndex: 'status',
-  //   key: 'status',
-  //   resizable: true,
-  //   filterSearch: true,
-  //   sortDirections: ['desc', 'asc'],
-  //   sorter: true,
-  //   width: 80
-  //   // filteredValue: state.filters?.status_id || null
-  // },
   {
-    title: 'Price',
+    title: 'Брэнд',
+    dataIndex: 'brand',
+    key: 'brand',
+    resizable: true,
+    sortDirections: ['desc', 'asc'],
+    sorter: true,
+    filterSearch: true,
+    width: 60
+    // filteredValue: state.filters?.email || null
+  },
+  {
+    title: 'В наличие',
+    dataIndex: 'in_stock',
+    key: 'in_stock',
+    resizable: true,
+    filterSearch: true,
+    width: 30
+    // filteredValue: state.filters?.phone || null
+  },
+  {
+    title: 'Цена',
     dataIndex: 'price',
     key: 'price',
     resizable: true,
     filterSearch: true,
     sortDirections: ['desc', 'asc'],
     sorter: true,
-    width: 80
+    width: 120
     // filteredValue: state.filters?.created_at || null
-  }
+  },
+  {
+    title: 'Двигатель',
+    dataIndex: 'engine',
+    key: 'engine',
+    resizable: true,
+    filterSearch: true,
+    width: 50
+    // filteredValue: state.filters?.phone || null
+  },
+  {
+    title: 'Коробка передач',
+    dataIndex: 'transmission',
+    key: 'transmission',
+    resizable: true,
+    filterSearch: true,
+    width: 100
+    // filteredValue: state.filters?.phone || null
+  },
+  {
+    title: 'Разрешённая макс. масса',
+    dataIndex: 'max_weight',
+    key: 'max_weight',
+    resizable: true,
+
+    width: 100
+    // filteredValue: state.filters?.all_orders || null
+  },
+  {
+    title: 'Тип кабины',
+    dataIndex: 'cabin_type',
+    key: 'cabin_type',
+    resizable: true,
+
+    width: 80
+
+    // filteredValue: state.filters?.order_total || null
+  },
+  {
+    title: 'Тип подвески',
+    dataIndex: 'suspension_type',
+    key: 'suspension_type',
+    resizable: true,
+
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
+
+  {
+    title: 'Тип тормозов',
+    dataIndex: 'brake_type',
+    key: 'brake_type',
+    resizable: true,
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
+  {
+    title: 'Колесная формула',
+    dataIndex: 'wheel_formulae',
+    key: 'wheel_formula',
+    resizable: true,
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
+  {
+    title: 'Количество осей',
+    dataIndex: 'axles_number',
+    key: 'axles_number',
+    resizable: true,
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
+
+  {
+    title: 'Цвет',
+    dataIndex: 'color',
+    key: 'color',
+    resizable: true,
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
+
 ])
 
 const responsiveColumns = computed(() => {
