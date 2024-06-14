@@ -48,6 +48,11 @@ export class NewsController {
         )
     }
 
+    @Get(':id')
+    async getOne(@Param() { id }: { id: number }): Promise<News> {
+        return this.newsService.getNewsById(id)
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()

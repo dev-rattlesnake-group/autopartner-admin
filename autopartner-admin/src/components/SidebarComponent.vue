@@ -18,6 +18,7 @@ const adminMenuData = [
   // { title: 'Аккаунты', route: 'customers', icon: 'UsersIcon' },
 
   { title: 'Продукты', route: 'products', icon: 'BagIcon' },
+  { title: 'Новости', route: 'news', icon: 'FolderIcon' },
 
 ]
 const customerMenuData = [

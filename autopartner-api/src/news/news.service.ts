@@ -31,4 +31,7 @@ export class NewsService {
     async deleteNews(id: number) {
         return await this.newsRepository.delete(id)
     }
+    async getNewsById(id: number) {
+        return await this.newsRepository.findOne({ where: { id } })
+    }
 }

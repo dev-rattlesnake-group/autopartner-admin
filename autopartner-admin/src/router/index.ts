@@ -4,7 +4,10 @@ const CustomersView = () => import('@/views/Customer/CustomersView.vue')
 const ProductsView = () => import('@/views/Product/ProductsView.vue')
 const CreateProductView = () => import('@/views/Product/CreateProductView.vue')
 const UpdateProductView = () => import('@/views/Product/UpdateProductView.vue')
+const NewsView = () => import('@/views/News/NewsView.vue')
 import Routes from '@/router/routes.constants'
+const CreateNewsView = () => import('@/views/News/CreateNewsView.vue')
+const UpdateNewsView = () => import('@/views/News/UpdateNewsView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +47,21 @@ const router = createRouter({
       path: '/admin/products/:id',
       name: 'updateProduct',
       component: UpdateProductView,
+    },
+    {
+      path: '/admin/news',
+      name: 'news',
+      component: NewsView,
+    },
+    {
+      path: '/admin/news/crerate',
+      name: 'createNews',
+      component: CreateNewsView,
+    },
+    {
+      path: '/admin/news/:id',
+      name: 'updateNews',
+      component: UpdateNewsView,
     },
   ],
 })

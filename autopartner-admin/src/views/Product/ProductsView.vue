@@ -572,8 +572,8 @@ const openUpdateBrand = async (category: string) => {
 }
 </script>
 <template>
-  <div class="customers-wrapper">
-    <CustomerCreateComponent :open="openCreateModal = true" @close="closeCreateModal" />
+  <div class="customers-wrapper ">
+    <!-- <CustomerCreateComponent :open="openCreateModal = true" @close="closeCreateModal" /> -->
     <!-- <div class="customer-panels flex flex-col lg:flex-row">
       <div class="customer-panels_all w-full lg:w-[45%] bg-[#C40F30] text-white">
         <div class="flex items-center w-full justify-between max-h-[50%] mb-[2rem]">
@@ -683,7 +683,7 @@ const openUpdateBrand = async (category: string) => {
         <a-button @click="createBrand">Создать</a-button>
       </template>
     </a-modal>
-    <div class="flex gap-4">
+    <div class="flex gap-4 pt-4">
       <div class="w-[20rem] h-[14rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
         <p class="text-lg font-semibold">Категории</p>
         <div class="w-full h-fit flex flex-col items-start px-4 max-h-[12rem] overflow-y-auto ">
@@ -695,7 +695,7 @@ const openUpdateBrand = async (category: string) => {
                 class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
               </button>
               <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
-                @confirm="confirm(category)" @cancel="cancel">
+                @confirm="confirm(category)">
                 <button
                   class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
                 </button>

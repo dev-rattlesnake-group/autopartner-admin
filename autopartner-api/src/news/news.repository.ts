@@ -12,6 +12,11 @@ export class NewsRepository extends Repository<News> {
     constructor(private dataSource: DataSource) {
         super(News, dataSource.createEntityManager())
     }
+    async getNew(id: number) {
+        return this.createQueryBuilder('news')
+            .where('id = :id', { id: id })
+            .getOne()
+    }
     async updateNews(id: number, newsDto: NewsCreateType) {
         return this.createQueryBuilder('news')
             .update()
