@@ -19,6 +19,7 @@ const adminMenuData = [
 
   { title: 'Продукты', route: 'products', icon: 'BagIcon' },
   { title: 'Новости', route: 'news', icon: 'FolderIcon' },
+  { title: 'Отзывы', route: 'feedbacks', icon: 'CategoryIcon' },
 
 ]
 const customerMenuData = [

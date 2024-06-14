@@ -10,6 +10,7 @@ import {
 export type FeedbackCreateType = {
     author: string
     content: string
+    date: Date
     company?: string
 }
 
@@ -23,6 +24,9 @@ export class Feedbacks extends BaseEntity {
 
     @Column({ type: 'varchar' })
     content: string
+
+    @Column({ type: 'date' })
+    date: Date
 
     @Column({ type: 'varchar', nullable: true })
     company: string

@@ -47,6 +47,11 @@ export class FeedbackController {
         )
     }
 
+    @Get(':id')
+    async getOne(@Param() { id }: { id: number }): Promise<Feedbacks> {
+        return this.feedbackService.getFeedbackById(id)
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()

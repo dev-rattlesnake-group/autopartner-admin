@@ -14,7 +14,7 @@ export interface INews {
 export interface INewsCreate {}
 
 export const useNewsStore = defineStore({
-  id: 'invoices',
+  id: 'news',
   state: () => ({
     news: [] as INews[] | [],
     new: {} as INews,

@@ -32,4 +32,7 @@ export class FeedbackService {
     async deleteFeedback(id: number) {
         return await this.feedbackRepository.deleteFeedback(id)
     }
+    async getFeedbackById(id: number) {
+        return await this.feedbackRepository.findOne({ where: { id } })
+    }
 }

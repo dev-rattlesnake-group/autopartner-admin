@@ -8,6 +8,11 @@ const NewsView = () => import('@/views/News/NewsView.vue')
 import Routes from '@/router/routes.constants'
 const CreateNewsView = () => import('@/views/News/CreateNewsView.vue')
 const UpdateNewsView = () => import('@/views/News/UpdateNewsView.vue')
+const FeedbackView = () => import('@/views/Feedback/FeedbackView.vue')
+const FeedbackCreateView = () =>
+  import('@/views/Feedback/CreateFeedbackView.vue')
+const FeedbackUpdateView = () =>
+  import('@/views/Feedback/UpdateFeedbackView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +67,21 @@ const router = createRouter({
       path: '/admin/news/:id',
       name: 'updateNews',
       component: UpdateNewsView,
+    },
+    {
+      path: '/admin/feedbacks',
+      name: 'feedbacks',
+      component: FeedbackView,
+    },
+    {
+      path: '/admin/feedbacks/crerate',
+      name: 'createFeedback',
+      component: FeedbackCreateView,
+    },
+    {
+      path: '/admin/feedbacks/:id',
+      name: 'updateFeedback',
+      component: FeedbackUpdateView,
     },
   ],
 })
