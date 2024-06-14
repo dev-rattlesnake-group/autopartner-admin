@@ -121,4 +121,9 @@ export class CreateProductDto {
     @IsOptional()
     @IsString()
     image_url?: string
+
+    @ApiProperty()
+    @IsOptional()
+    @IsString({ each: true })
+    image_urls?: string[]
 }

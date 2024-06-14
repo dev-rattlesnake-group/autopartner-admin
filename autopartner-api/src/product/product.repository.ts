@@ -57,11 +57,40 @@ export class ProductRepository extends Repository<Products> {
     }
 
     async createProduct(product: ProductCreateType): Promise<Products> {
+        if (product.image_urls?.length) {
+            let image_urls = `{`
+            product.image_urls.forEach((i, index) => {
+                image_urls += `'${i}'`
+                if (index < product.image_urls.length - 1) {
+                    image_urls += `,`
+                }
+            })
+            image_urls += `}`
+
+            // @ts-ignore
+            product.image_urls = image_urls
+        } else {
+            product.image_urls = null
+        }
         return this.save(product)
     }
 
     async updateProduct(id: number, product: ProductCreateType) {
-        console.log({ id, product })
+        if (product.image_urls?.length) {
+            let image_urls = `{`
+            product.image_urls.forEach((i, index) => {
+                image_urls += `'${i}'`
+                if (index < product.image_urls.length - 1) {
+                    image_urls += `,`
+                }
+            })
+            image_urls += `}`
+
+            // @ts-ignore
+            product.image_urls = image_urls
+        } else {
+            product.image_urls = null
+        }
         return this.createQueryBuilder('products')
             .update()
             .set(product)

@@ -35,6 +35,7 @@ export type ProductCreateType = {
     color?: string
     options?: string
     image_url?: string
+    image_urls?: string[]
 }
 
 @Entity()
@@ -113,6 +114,9 @@ export class Products extends BaseEntity {
 
     @Column({ type: 'varchar', nullable: true })
     image_url?: string
+
+    @Column('simple-array', { nullable: true })
+    image_urls?: string[]
 
     @CreateDateColumn({ nullable: true })
     created_at: Date

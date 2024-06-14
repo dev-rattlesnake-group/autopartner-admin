@@ -39,6 +39,7 @@ const productForm = reactive({
   color: '',
   options: '',
   image_url: '',
+  image_urls: []
 })
 const fileList = ref([])
 const errors = reactive({
@@ -81,12 +82,24 @@ onMounted(async () => {
         break
 
       }
-      // case 
+      case 'image_urls': {
+        productForm[formProperty] = productStore.product?.[formProperty]
+        if (productForm[formProperty].length) {
+
+          productForm[formProperty].forEach((im, index) => {
+            console.log({ im })
+            const [, fileName] = im.split('upload/')
+            fileList.value.push({ uuid: (index + 2), name: fileName, url: im })
+          })
+        }
+        break
+      }
       default: productForm[formProperty] = productStore.product?.[formProperty]
 
     }
   })
   productForm.name = productStore.product.name
+  console.log({ fileList })
 
 
 })
@@ -126,6 +139,7 @@ const updateProduct = async () => {
     if (!validateForm()) return
 
 
+
     await productStore.updateProduct(productForm)
     message.success('Product updated successfully')
     router.push({ name: 'products' })
@@ -144,7 +158,14 @@ const deleteProduct = async () => {
 const handleChange = (info: UploadChangeParam) => {
   console.log({ info })
   if (info.file.status === 'removed') {
-    productForm.image_url = ''
+    if (info.file.url == productForm.image_url) {
+      productForm.image_url = ''
+    } else {
+      const ind = productForm.image_urls.findIndex((el) => { el == info.file.url })
+      productForm.image_urls.splice(ind, 1)
+
+    }
+
 
   } else if (info.file.status === 'done') {
     message.success(`${info.file.name} file uploaded successfully`)

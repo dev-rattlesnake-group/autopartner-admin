@@ -49,6 +49,7 @@ const productForm = reactive({
   color: '',
   options: '',
   image_url: '',
+  image_urls: [],
 })
 const errors = reactive({
   name: false,
@@ -92,7 +93,7 @@ const createProduct = async () => {
     if (!validateForm()) return
 
 
-    console.log({ productStore })
+
     await productStore.createProduct(productForm)
     message.success('Product created successfully')
     router.push({ name: 'products' })
@@ -104,10 +105,27 @@ const createProduct = async () => {
 }
 
 const handleChange = (info: UploadChangeParam) => {
+  console.log({ fileList })
+  if (info.file.status === 'removed') {
+    if (info.file.url == productForm.image_url) {
+      productForm.image_url = ''
+    } else {
+      const ind = productForm.image_urls.findIndex((el) => { el == info.file.url })
+      productForm.image_urls.splice(ind, 1)
 
+    }
+
+  }
   if (info.file.status === 'done') {
     message.success(`${info.file.name} file uploaded successfully`)
-    productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+    if (!productForm.image_url) {
+      productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+      console.log(productForm.image_url)
+    } else {
+      productForm.image_urls.push(`${API_URL}/upload/` + info.file.response?.data)
+      console.log(productForm.image_urls)
+    }
+
   } else if (info.file.status === 'error') {
     message.error(`${info.file.name} file upload failed.`);
   }
@@ -203,7 +221,7 @@ const handleChange = (info: UploadChangeParam) => {
       </div>
     </div>
     <div class="md:w-[39%] w-full rounded-lg bg-white h-full flex flex-col p-6">
-      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="false"
+      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="true"
         :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
         <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
           <BulkIcon class="mt-[4rem]" />

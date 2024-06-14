@@ -38,6 +38,7 @@ export class ProductService {
     }
 
     async createProduct(product: ProductCreateType): Promise<Products> {
+        console.log({ product })
         return this.productRepository.createProduct(product)
     }
     async updateProduct(product: ProductCreateType, id: number) {
