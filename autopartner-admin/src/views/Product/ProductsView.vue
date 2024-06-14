@@ -249,6 +249,14 @@ const columns = ref<Record<string, any>[]>([
     width: 50
     // filteredValue: state.filters?.status_id || null
   },
+  {
+    title: 'Доп инфо',
+    dataIndex: 'options',
+    key: 'options',
+    resizable: true,
+    width: 50
+    // filteredValue: state.filters?.status_id || null
+  },
 
 ])
 
@@ -398,6 +406,7 @@ const columnsMobile = ref([
     width: 50
     // filteredValue: state.filters?.status_id || null
   },
+
 
 ])
 

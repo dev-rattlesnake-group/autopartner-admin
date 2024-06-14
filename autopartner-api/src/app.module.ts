@@ -7,6 +7,8 @@ import { ProductModule } from './product/product.module'
 import { AccountModule } from './account/account.module'
 
 import { UploadModule } from './upload/upload.module'
+import { NewsModule } from './news/news.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
     imports: [
@@ -20,6 +22,8 @@ import { UploadModule } from './upload/upload.module'
         AccountModule,
         ProductModule,
         UploadModule,
+        NewsModule,
+        FeedbackModule,
     ],
     controllers: [],
     providers: [],

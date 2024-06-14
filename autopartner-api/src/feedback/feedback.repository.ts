@@ -1,40 +1,53 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource, Repository } from 'typeorm'
-import { ProductCreateType, Products } from './entities/product.entity'
+
 import { PageOptionsDto } from 'src/dto/page-options.dto'
 import { Filtering } from 'src/decorators/filtering-params.decorator'
 import { Sorting } from 'src/decorators/sorting.decorator'
 import { PageDto } from 'src/dto/pagination.dto'
 import { PageMetaDto } from 'src/dto/page-meta.dto'
+import { Feedbacks, FeedbackCreateType } from './feedback.entity'
 
 @Injectable()
-export class ProductRepository extends Repository<Products> {
+export class FeedbackRepository extends Repository<Feedbacks> {
     constructor(private dataSource: DataSource) {
-        super(Products, dataSource.createEntityManager())
+        super(Feedbacks, dataSource.createEntityManager())
     }
-
-    async getProducts(
+    async updateFeedback(id: number, newsDto: FeedbackCreateType) {
+        return this.createQueryBuilder('feedbacks')
+            .update()
+            .set(newsDto)
+            .where('id = :id', { id: id })
+            .execute()
+    }
+    async deleteFeedback(id: number) {
+        return this.createQueryBuilder('feedbacks')
+            .delete()
+            .where('id = :id', { id: id })
+            .execute()
+    }
+    async getFeedbacks(
         pageOptionsDto: PageOptionsDto,
         filterParams: Filtering,
         searchParams: string,
         sortParams: Sorting
-    ): Promise<PageDto<Products>> {
-        const queryBuilder = this.createQueryBuilder('products')
+    ): Promise<PageDto<Feedbacks>> {
+        const queryBuilder = this.createQueryBuilder('feedbacks')
         queryBuilder
-            .orderBy('products.created_at', pageOptionsDto.order)
+            .orderBy('feedbacks.created_at', pageOptionsDto.order)
             .skip(pageOptionsDto.skip)
             .take(pageOptionsDto.take)
 
         if (filterParams) {
             Object.keys(filterParams).forEach((f) => {
-                queryBuilder.andWhere(`products.${f} IN (:...${f})`, {
+                queryBuilder.andWhere(`feedbacks.${f} IN (:...${f})`, {
                     [f]: filterParams[f],
                 })
             })
         }
 
         if (searchParams) {
-            queryBuilder.andWhere('products.name LIKE :search', {
+            queryBuilder.andWhere('feedbacks.author LIKE :search', {
                 search: `%${searchParams}%`,
             })
         }
@@ -43,7 +56,7 @@ export class ProductRepository extends Repository<Products> {
                 | 'ASC'
                 | 'DESC'
             queryBuilder.orderBy(
-                `products.${sortParams.property}`,
+                `feedbacks.${sortParams.property}`,
                 sortParamDirectoin
             )
         }
@@ -54,24 +67,5 @@ export class ProductRepository extends Repository<Products> {
         const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto })
 
         return new PageDto(entities, pageMetaDto)
-    }
-
-    async createProduct(product: ProductCreateType): Promise<Products> {
-        return this.save(product)
-    }
-
-    async updateProduct(id: number, product: ProductCreateType) {
-        console.log({ id, product })
-        return this.createQueryBuilder('products')
-            .update()
-            .set(product)
-            .where('id = :id', { id })
-            .execute()
-    }
-    async deleteProduct(id: number) {
-        return this.createQueryBuilder('products')
-            .delete()
-            .where('id = :id', { id })
-            .execute()
     }
 }
