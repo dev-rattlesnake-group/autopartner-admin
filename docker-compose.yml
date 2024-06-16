@@ -106,6 +106,7 @@ services:
     
 
   nginx:
+    image: nginx:stable-alpine
     container_name: nginx
     restart: unless-stopped
     depends_on:
