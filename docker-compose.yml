@@ -105,17 +105,18 @@ services:
       - /usr/src/app/node_modules
     
 
-  autopartner_nginx:
-    container_name: autopartner-nginx
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     restart: unless-stopped
-    build:
-      context: ./nginx
     depends_on:
+      certbot:
+        condition: service_started
       autopartner_web:
         condition: service_started
     volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./nginx/cert.pem:/etc/cert.pem
+    - ./nginx/conf.d:/etc/nginx/conf.d
+    - ./nginx/.well-known:/var/www/certbot/.well-known
     - ./nginx/key.pem:/etc/key.pem
     ports:
       - "80:80"
@@ -124,23 +125,14 @@ services:
       - autopartner-network
   
   certbot:
-    ports:
-      - "6000:80"
-    env_file:
-      - .env
-    # и снова мониторуем директорию nginx
-    volumes:
-      - ./nginx/:/etc/nginx/
-    build:
-      context: ./certbot
-      dockerfile: Dockerfile
-      # задаем переменные среды
-      args:
-        DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-        DOMAIN_URL: ${DOMAIN_URL}
-    networks:
-    - autopartner-network  
-  
+      image: certbot/certbot
+      container_name: certbot
+      volumes:
+        - ./nginx/certs:/etc/letsencrypt
+        - ./nginx/.well-known:/var/www/certbot/.well-known
+      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew; done;'"
+      networks:
+      - autopartner-network
 
 volumes:
   pgdata:
