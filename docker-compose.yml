@@ -105,8 +105,8 @@ services:
       - /usr/src/app/node_modules
     
 
-  autopartner_nginx:
-    container_name: autopartner-nginx
+  nginx:
+    container_name: nginx_proxy
     restart: unless-stopped
     build:
       context: ./nginx
