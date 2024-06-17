@@ -26,6 +26,10 @@ async function bootstrap() {
             'http://localhost',
             'http://localhost:3000',
             'http://0.0.0.0',
+	    'https://main--frabjous-souffle-3a27d9.netlify.app',
+	    'https://main--frabjous-souffle-3a27d9.netlify.app/catalog',
+	    'https://main--frabjous-souffle-3a27d9.netlify.app/news',
+	    'https://main--frabjous-souffle-3a27d9.netlify.app/feedbacks'				
         ],
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
