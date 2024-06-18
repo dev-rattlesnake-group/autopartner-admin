@@ -9,6 +9,8 @@ import { AccountModule } from './account/account.module'
 import { UploadModule } from './upload/upload.module'
 import { NewsModule } from './news/news.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { VacancyModule } from './vacancy/vacancy.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
     imports: [
@@ -24,6 +26,8 @@ import { FeedbackModule } from './feedback/feedback.module';
         UploadModule,
         NewsModule,
         FeedbackModule,
+        VacancyModule,
+        EventsModule,
     ],
     controllers: [],
     providers: [],

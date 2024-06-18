@@ -637,9 +637,7 @@ COPY public.news (id, title, content, image_url, date, created_at, updated_at) F
 --
 
 COPY public.products (id, category, brand, engine, transmission, max_weight, cabin_type, suspension_type, suspension_cabin, suspension_chassis, brake_type, wheel_formula, axles_number, fifth_wheel_height, trailer_volume, trailer_length, euro, image_url, account_id, created_at, updated_at, name, in_stock, vehicles_year, options, price, color, image_urls) FROM stdin;
-5	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					6×4						http://5.35.85.163/api/upload/img-20240405-wa0098jpg_1718192386041.jpg	1	2024-06-12 11:39:53.850115	2024-06-12 11:39:53.850115	Shacman X5000	t	2023		9600000	Белый	\N
 4	Самосвал	Shacman	10.8 л / 430 л.с. / Дизель \\Weichai	Механическа		2-х местная с 1 спальным					6*4						http://5.35.85.163/api/upload/img-20240405-wa0089jpg_1718192762125.jpg	1	2024-06-12 11:29:05.60685	2024-06-12 11:46:05.818616	Shacman Х5000	t	2023		9650000	Золотистый	\N
-6	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					8*4						http://5.35.85.163/api/upload/photo2024-04-1909-43-30jpg_1718192896705.jpg	1	2024-06-12 11:48:30.809058	2024-06-12 11:48:30.809058	Shacman Х3000	t	2023		9700000	Зеленый	\N
 7	Самосвал	Shacman	12,5/550л.с./Дизель/Weichai	Механическая		2-х местная с 1 спальным					8×4						http://5.35.85.163/api/upload/111photo82024-04-1910-19-38jpg_1718193031118.jpg	1	2024-06-12 11:50:32.480685	2024-06-12 11:50:32.480685	Shacman X5000	t	2023		10700000	Красный	\N
 8	Самосвал	HOWO	400 л.с. /  Дизель	Механическая		2-х местная с 1 спальным					8×4						http://5.35.85.163/api/upload/img4618jpg_1718193352860.jpg	1	2024-06-12 11:57:17.868261	2024-06-12 11:57:17.868261	Howo T5G	t	2024		10400000	Красный, серый	\N
 9	Самосвал	HOWO	440 л.с / Дизель	Механическая		2-х местная с 1 спальным					6×4						http://5.35.85.163/api/upload/img14618jpg_1718193796887.jpg	1	2024-06-12 12:03:25.793559	2024-06-12 12:03:25.793559	Howo T5G	t	2024		9700000	Красный, серый	\N
@@ -649,6 +647,8 @@ COPY public.products (id, category, brand, engine, transmission, max_weight, cab
 13	Полуприцеп рефрижератор	Krone	30.0 т				Пневматическая							90 м³	13310 мм		http://5.35.85.163/api/upload/img454618jpg_1718195923079.jpg	1	2024-06-12 12:38:45.639798	2024-06-12 12:38:45.639798	Krone Cool Liner	t	2024		11300000		\N
 14	Полуприцеп рефрижератор	Krone												90 м³	13600 мм		http://5.35.85.163/api/upload/krone-sdjpg_1718196197884.jpg	1	2024-06-12 12:43:21.844296	2024-06-12 12:43:21.844296	Krone SD	t	2024		6100000	Серебристый	\N
 15	Полуприцеп рефрижератор	Krone	34.0 т											90 м³	13600 мм		http://5.35.85.163/api/upload/krone-sd-2023jpg_1718196423038.jpg	1	2024-06-12 12:47:43.178414	2024-06-12 12:47:43.178414	Krone SD	t	2023		5700000	Синий	\N
+5	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					6×4						https://vladdizlaw.store/api/upload/img-20240405-wa0098jpg_1718192386041.jpg	1	2024-06-12 11:39:53.850115	2024-06-12 11:39:53.850115	Shacman X5000	t	2023		9600000	Белый	\N
+6	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					8*4						https://vladdizlaw.store/api/upload/photo62024-04-1910-16-53jpg_1718649811619.jpg	1	2024-06-12 11:48:30.809058	2024-06-17 18:43:32.988058	Shacman Х3000	t	2023		9700000	Зеленый	\N
 \.
 
 
@@ -684,7 +684,7 @@ SELECT pg_catalog.setval('public.news_id_seq', 2, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 22, true);
+SELECT pg_catalog.setval('public.products_id_seq', 23, true);
 
 
 --

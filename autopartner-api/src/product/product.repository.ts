@@ -79,7 +79,7 @@ export class ProductRepository extends Repository<Products> {
         if (product.image_urls?.length) {
             let image_urls = `{`
             product.image_urls.forEach((i, index) => {
-                image_urls += `'${i}'`
+                image_urls += `${i}`
                 if (index < product.image_urls.length - 1) {
                     image_urls += `,`
                 }

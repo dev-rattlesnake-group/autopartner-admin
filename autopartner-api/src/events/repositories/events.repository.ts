@@ -1,57 +1,59 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource, Repository } from 'typeorm'
-import { News, NewsCreateType } from './news.entity'
 import { PageOptionsDto } from 'src/dto/page-options.dto'
 import { Filtering } from 'src/decorators/filtering-params.decorator'
 import { Sorting } from 'src/decorators/sorting.decorator'
 import { PageDto } from 'src/dto/pagination.dto'
 import { PageMetaDto } from 'src/dto/page-meta.dto'
+import { EventCreateType, Events } from '../entities/events.entity'
 
 @Injectable()
-export class NewsRepository extends Repository<News> {
+export class EventRepository extends Repository<Events> {
     constructor(private dataSource: DataSource) {
-        super(News, dataSource.createEntityManager())
+        super(Events, dataSource.createEntityManager())
     }
-    async getNew(id: number) {
-        return this.createQueryBuilder('news')
+    async getEvent(id: number) {
+        return this.createQueryBuilder('events')
             .where('id = :id', { id: id })
+            .leftJoinAndSelect('event_details', 'event_id')
             .getOne()
     }
-    async updateNews(id: number, newsDto: NewsCreateType) {
-        return this.createQueryBuilder('news')
+    async updateEvent(id: number, dto: EventCreateType) {
+        return this.createQueryBuilder('events')
             .update()
-            .set(newsDto)
+            .set(dto)
             .where('id = :id', { id: id })
             .execute()
     }
-    async deleteCategory(id: number) {
-        return this.createQueryBuilder('news')
+    async deleteEvent(id: number) {
+        return this.createQueryBuilder('events')
             .delete()
             .where('id = :id', { id: id })
             .execute()
     }
-    async getNews(
+    async getEvents(
         pageOptionsDto: PageOptionsDto,
         filterParams: Filtering,
         searchParams: string,
         sortParams: Sorting
-    ): Promise<PageDto<News>> {
-        const queryBuilder = this.createQueryBuilder('news')
+    ): Promise<PageDto<Events>> {
+        const queryBuilder = this.createQueryBuilder('events')
         queryBuilder
-            .orderBy('news.created_at', pageOptionsDto.order)
+            .orderBy('events.created_at', pageOptionsDto.order)
+            .leftJoinAndSelect('event_details', 'event_id')
             .skip(pageOptionsDto.skip)
             .take(pageOptionsDto.take)
 
         if (filterParams) {
             Object.keys(filterParams).forEach((f) => {
-                queryBuilder.andWhere(`news.${f} IN (:...${f})`, {
+                queryBuilder.andWhere(`events.${f} IN (:...${f})`, {
                     [f]: filterParams[f],
                 })
             })
         }
 
         if (searchParams) {
-            queryBuilder.andWhere('news.title LIKE :search', {
+            queryBuilder.andWhere('events.title LIKE :search', {
                 search: `%${searchParams}%`,
             })
         }
@@ -60,7 +62,7 @@ export class NewsRepository extends Repository<News> {
                 | 'ASC'
                 | 'DESC'
             queryBuilder.orderBy(
-                `news.${sortParams.property}`,
+                `events.${sortParams.property}`,
                 sortParamDirectoin
             )
         }

@@ -75,7 +75,7 @@ onMounted(async () => {
         if (productStore.product?.[formProperty]) {
           productForm[formProperty] = productStore.product?.[formProperty]
           const [, fileName] = productStore.product?.[formProperty].split('upload/')
-          fileList.value.push({ uuid: 1, name: fileName, url: productStore.product?.[formProperty] })
+          fileList.value.push({ uuid: fileName, name: fileName, url: productStore.product?.[formProperty] })
           break
         }
 
@@ -83,13 +83,14 @@ onMounted(async () => {
 
       }
       case 'image_urls': {
-        productForm[formProperty] = productStore.product?.[formProperty]
-        if (productForm[formProperty].length) {
 
-          productForm[formProperty].forEach((im, index) => {
+        if (productStore.product?.[formProperty]?.length) {
+
+          productStore.product?.[formProperty].forEach((im, index) => {
             console.log({ im })
             const [, fileName] = im.split('upload/')
-            fileList.value.push({ uuid: (index + 2), name: fileName, url: im })
+            fileList.value.push({ uuid: fileName + index, name: fileName, url: im })
+            productForm['image_urls'].push(im)
           })
         }
         break
@@ -169,7 +170,15 @@ const handleChange = (info: UploadChangeParam) => {
 
   } else if (info.file.status === 'done') {
     message.success(`${info.file.name} file uploaded successfully`)
-    productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+    console.log(productForm.image_url)
+
+    if (!productForm.image_url) {
+      productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+
+    } else {
+      productForm.image_urls.push((`${API_URL}/upload/` + info.file.response?.data))
+    }
+
   } else if (info.file.status === 'error') {
     message.error(`${info.file.name} file upload failed.`);
   }
@@ -270,7 +279,7 @@ const handleChange = (info: UploadChangeParam) => {
       </div>
     </div>
     <div class="md:w-[39%] w-full rounded-lg bg-white h-full flex flex-col p-6">
-      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="false"
+      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="true"
         :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
         <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
           <BulkIcon class="mt-[4rem]" />

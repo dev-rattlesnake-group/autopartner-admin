@@ -1,44 +1,44 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource, Repository } from 'typeorm'
-import { News, NewsCreateType } from './news.entity'
 import { PageOptionsDto } from 'src/dto/page-options.dto'
 import { Filtering } from 'src/decorators/filtering-params.decorator'
 import { Sorting } from 'src/decorators/sorting.decorator'
 import { PageDto } from 'src/dto/pagination.dto'
 import { PageMetaDto } from 'src/dto/page-meta.dto'
+import { Vacancies, VacancyCreateType } from './vacancy.entity'
 
 @Injectable()
-export class NewsRepository extends Repository<News> {
+export class VacancyRepository extends Repository<Vacancies> {
     constructor(private dataSource: DataSource) {
-        super(News, dataSource.createEntityManager())
+        super(Vacancies, dataSource.createEntityManager())
     }
-    async getNew(id: number) {
-        return this.createQueryBuilder('news')
+    async getVacancy(id: number) {
+        return this.createQueryBuilder('vacancies')
             .where('id = :id', { id: id })
             .getOne()
     }
-    async updateNews(id: number, newsDto: NewsCreateType) {
-        return this.createQueryBuilder('news')
+    async updateVacancy(id: number, dto: VacancyCreateType) {
+        return this.createQueryBuilder('vacancies')
             .update()
-            .set(newsDto)
+            .set(dto)
             .where('id = :id', { id: id })
             .execute()
     }
-    async deleteCategory(id: number) {
-        return this.createQueryBuilder('news')
+    async deleteVacancy(id: number) {
+        return this.createQueryBuilder('vacancies')
             .delete()
             .where('id = :id', { id: id })
             .execute()
     }
-    async getNews(
+    async getVacancies(
         pageOptionsDto: PageOptionsDto,
         filterParams: Filtering,
         searchParams: string,
         sortParams: Sorting
-    ): Promise<PageDto<News>> {
-        const queryBuilder = this.createQueryBuilder('news')
+    ): Promise<PageDto<Vacancies>> {
+        const queryBuilder = this.createQueryBuilder('vacancies')
         queryBuilder
-            .orderBy('news.created_at', pageOptionsDto.order)
+            .orderBy('vacancies.created_at', pageOptionsDto.order)
             .skip(pageOptionsDto.skip)
             .take(pageOptionsDto.take)
 
@@ -51,7 +51,7 @@ export class NewsRepository extends Repository<News> {
         }
 
         if (searchParams) {
-            queryBuilder.andWhere('news.title LIKE :search', {
+            queryBuilder.andWhere('vacancies.title LIKE :search', {
                 search: `%${searchParams}%`,
             })
         }
@@ -60,7 +60,7 @@ export class NewsRepository extends Repository<News> {
                 | 'ASC'
                 | 'DESC'
             queryBuilder.orderBy(
-                `news.${sortParams.property}`,
+                `vacancies.${sortParams.property}`,
                 sortParamDirectoin
             )
         }
