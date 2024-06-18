@@ -5,9 +5,13 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     Column,
+    ManyToOne,
+    JoinColumn,
 } from 'typeorm'
+import { Events } from './events.entity'
 
 export type EventDetailsCreateType = {
+    id?: number
     title: string
     description: string
     event_id: number
@@ -24,6 +28,7 @@ export class EventDetails extends BaseEntity {
     @Column({ type: 'varchar' })
     description: string
 
-    @Column({ type: 'int' })
+    @ManyToOne((type) => Events)
+    @JoinColumn([{ name: 'event_id', referencedColumnName: 'id' }])
     event_id: number
 }

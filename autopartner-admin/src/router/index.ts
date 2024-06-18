@@ -13,6 +13,12 @@ const FeedbackCreateView = () =>
   import('@/views/Feedback/CreateFeedbackView.vue')
 const FeedbackUpdateView = () =>
   import('@/views/Feedback/UpdateFeedbackView.vue')
+const VacancyView = () => import('@/views/Vacancy/VacancyView.vue')
+const VacancyCreateView = () => import('@/views/Vacancy/CreateVacancyView.vue')
+const VacancyUpdateView = () => import('@/views/Vacancy/UpdateVacancyView.vue')
+const EventsView = () => import('@/views/Events/EventsView.vue')
+const CreateEventView = () => import('@/views/Events/CreateEventView.vue')
+const UpdateEventView = () => import('@/views/Events/UpdateEventView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +88,36 @@ const router = createRouter({
       path: '/admin/feedbacks/:id',
       name: 'updateFeedback',
       component: FeedbackUpdateView,
+    },
+    {
+      path: '/admin/vacancies',
+      name: 'vacancies',
+      component: VacancyView,
+    },
+    {
+      path: '/admin/vacancies/crerate',
+      name: 'createVacancy',
+      component: VacancyCreateView,
+    },
+    {
+      path: '/admin/vacancies/:id',
+      name: 'updateVacancy',
+      component: VacancyUpdateView,
+    },
+    {
+      path: '/admin/events',
+      name: 'events',
+      component: EventsView,
+    },
+    {
+      path: '/admin/events/crerate',
+      name: 'createEvent',
+      component: CreateEventView,
+    },
+    {
+      path: '/admin/events/:id',
+      name: 'updateEvent',
+      component: UpdateEventView,
     },
   ],
 })

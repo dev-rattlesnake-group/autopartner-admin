@@ -157,7 +157,7 @@ const deleteProduct = async () => {
 }
 
 const handleChange = (info: UploadChangeParam) => {
-  console.log({ info })
+
   if (info.file.status === 'removed') {
     if (info.file.url == productForm.image_url) {
       productForm.image_url = ''

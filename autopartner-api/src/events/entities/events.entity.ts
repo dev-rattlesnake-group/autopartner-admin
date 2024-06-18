@@ -7,6 +7,8 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    JoinTable,
+    JoinColumn,
 } from 'typeorm'
 import { EventDetails } from './event-details.entity'
 
@@ -34,7 +36,8 @@ export class Events extends BaseEntity {
     @Column({ type: 'date' })
     expired_date: Date
 
-    @OneToMany(() => EventDetails, (eventDetail) => eventDetail.event_id)
+    @OneToMany(() => EventDetails, (detail) => detail.event_id)
+    @JoinColumn([{ name: 'id', referencedColumnName: 'event_id' }])
     event_details: EventDetails[]
 
     @CreateDateColumn({ nullable: true })

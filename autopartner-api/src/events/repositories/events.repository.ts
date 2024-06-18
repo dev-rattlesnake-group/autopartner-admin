@@ -6,6 +6,7 @@ import { Sorting } from 'src/decorators/sorting.decorator'
 import { PageDto } from 'src/dto/pagination.dto'
 import { PageMetaDto } from 'src/dto/page-meta.dto'
 import { EventCreateType, Events } from '../entities/events.entity'
+import { EventDetails } from '../entities/event-details.entity'
 
 @Injectable()
 export class EventRepository extends Repository<Events> {
@@ -14,8 +15,11 @@ export class EventRepository extends Repository<Events> {
     }
     async getEvent(id: number) {
         return this.createQueryBuilder('events')
-            .where('id = :id', { id: id })
-            .leftJoinAndSelect('event_details', 'event_id')
+            .where('events.id = :id', { id: id })
+            .innerJoinAndSelect(
+                'events.event_details',
+                'event_details.event_id = events.id'
+            )
             .getOne()
     }
     async updateEvent(id: number, dto: EventCreateType) {
@@ -40,7 +44,10 @@ export class EventRepository extends Repository<Events> {
         const queryBuilder = this.createQueryBuilder('events')
         queryBuilder
             .orderBy('events.created_at', pageOptionsDto.order)
-            .leftJoinAndSelect('event_details', 'event_id')
+            .innerJoinAndSelect(
+                'events.event_details',
+                'event_details.event_id = events.id'
+            )
             .skip(pageOptionsDto.skip)
             .take(pageOptionsDto.take)
 

@@ -23,40 +23,40 @@ export class Vacancy1718702012680 implements MigrationInterface {
                         type: 'varchar',
                     },
                     {
-                        name: 'desciption_1',
+                        name: 'description_1',
                         type: 'varchar',
                         isNullable: true,
                     },
 
                     {
-                        name: 'desciption_2',
+                        name: 'description_2',
                         type: 'varchar',
                         isNullable: true,
                     },
 
                     {
-                        name: 'desciption_3',
+                        name: 'description_3',
                         type: 'varchar',
                         isNullable: true,
                     },
 
                     {
-                        name: 'desciption_4',
+                        name: 'description_4',
                         type: 'varchar',
                         isNullable: true,
                     },
                     {
-                        name: 'desciption_5',
+                        name: 'description_5',
                         type: 'varchar',
                         isNullable: true,
                     },
                     {
-                        name: 'desciption_6',
+                        name: 'description_6',
                         type: 'varchar',
                         isNullable: true,
                     },
                     {
-                        name: 'desciption_7',
+                        name: 'description_7',
                         type: 'varchar',
                         isNullable: true,
                     },
