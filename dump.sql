@@ -239,6 +239,81 @@ CREATE TABLE public.categories (
 ALTER TABLE public.categories OWNER TO autopartner_admin;
 
 --
+-- Name: event_details; Type: TABLE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE TABLE public.event_details (
+    id integer NOT NULL,
+    event_id integer NOT NULL,
+    title character varying NOT NULL,
+    description character varying NOT NULL
+);
+
+
+ALTER TABLE public.event_details OWNER TO autopartner_admin;
+
+--
+-- Name: event_details_id_seq; Type: SEQUENCE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE SEQUENCE public.event_details_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.event_details_id_seq OWNER TO autopartner_admin;
+
+--
+-- Name: event_details_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: autopartner_admin
+--
+
+ALTER SEQUENCE public.event_details_id_seq OWNED BY public.event_details.id;
+
+
+--
+-- Name: events; Type: TABLE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE TABLE public.events (
+    id integer NOT NULL,
+    title character varying NOT NULL,
+    description character varying NOT NULL,
+    expired_date date NOT NULL,
+    image_url character varying,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.events OWNER TO autopartner_admin;
+
+--
+-- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE SEQUENCE public.events_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.events_id_seq OWNER TO autopartner_admin;
+
+--
+-- Name: events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: autopartner_admin
+--
+
+ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
+
+
+--
 -- Name: feedbacks; Type: TABLE; Schema: public; Owner: autopartner_admin
 --
 
@@ -538,10 +613,67 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 
 
 --
+-- Name: vacancies; Type: TABLE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE TABLE public.vacancies (
+    id integer NOT NULL,
+    title character varying NOT NULL,
+    description_1 character varying,
+    description_2 character varying,
+    description_3 character varying,
+    description_4 character varying,
+    description_5 character varying,
+    description_6 character varying,
+    description_7 character varying,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.vacancies OWNER TO autopartner_admin;
+
+--
+-- Name: vacancies_id_seq; Type: SEQUENCE; Schema: public; Owner: autopartner_admin
+--
+
+CREATE SEQUENCE public.vacancies_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.vacancies_id_seq OWNER TO autopartner_admin;
+
+--
+-- Name: vacancies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: autopartner_admin
+--
+
+ALTER SEQUENCE public.vacancies_id_seq OWNED BY public.vacancies.id;
+
+
+--
 -- Name: accounts id; Type: DEFAULT; Schema: public; Owner: autopartner_admin
 --
 
 ALTER TABLE ONLY public.accounts ALTER COLUMN id SET DEFAULT nextval('public.accounts_id_seq'::regclass);
+
+
+--
+-- Name: event_details id; Type: DEFAULT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.event_details ALTER COLUMN id SET DEFAULT nextval('public.event_details_id_seq'::regclass);
+
+
+--
+-- Name: events id; Type: DEFAULT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.events ALTER COLUMN id SET DEFAULT nextval('public.events_id_seq'::regclass);
 
 
 --
@@ -573,6 +705,13 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: vacancies id; Type: DEFAULT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.vacancies ALTER COLUMN id SET DEFAULT nextval('public.vacancies_id_seq'::regclass);
+
+
+--
 -- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: autopartner_admin
 --
 
@@ -592,6 +731,7 @@ Beiben
 Krone
 FAW
 HOWO
+Новый бренд
 \.
 
 
@@ -603,6 +743,22 @@ COPY public.categories (name) FROM stdin;
 Самосвал
 Седельный тягач
 Полуприцеп рефрижератор
+\.
+
+
+--
+-- Data for Name: event_details; Type: TABLE DATA; Schema: public; Owner: autopartner_admin
+--
+
+COPY public.event_details (id, event_id, title, description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: autopartner_admin
+--
+
+COPY public.events (id, title, description, expired_date, image_url, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -621,6 +777,7 @@ COPY public.feedbacks (id, content, author, company, created_at, updated_at, dat
 COPY public.migrations (id, "timestamp", name) FROM stdin;
 2	1718002136923	Products1718002136923
 3	1718349613087	News1718349613087
+4	1718702012680	Vacancy1718702012680
 \.
 
 
@@ -637,7 +794,6 @@ COPY public.news (id, title, content, image_url, date, created_at, updated_at) F
 --
 
 COPY public.products (id, category, brand, engine, transmission, max_weight, cabin_type, suspension_type, suspension_cabin, suspension_chassis, brake_type, wheel_formula, axles_number, fifth_wheel_height, trailer_volume, trailer_length, euro, image_url, account_id, created_at, updated_at, name, in_stock, vehicles_year, options, price, color, image_urls) FROM stdin;
-4	Самосвал	Shacman	10.8 л / 430 л.с. / Дизель \\Weichai	Механическа		2-х местная с 1 спальным					6*4						http://5.35.85.163/api/upload/img-20240405-wa0089jpg_1718192762125.jpg	1	2024-06-12 11:29:05.60685	2024-06-12 11:46:05.818616	Shacman Х5000	t	2023		9650000	Золотистый	\N
 7	Самосвал	Shacman	12,5/550л.с./Дизель/Weichai	Механическая		2-х местная с 1 спальным					8×4						http://5.35.85.163/api/upload/111photo82024-04-1910-19-38jpg_1718193031118.jpg	1	2024-06-12 11:50:32.480685	2024-06-12 11:50:32.480685	Shacman X5000	t	2023		10700000	Красный	\N
 8	Самосвал	HOWO	400 л.с. /  Дизель	Механическая		2-х местная с 1 спальным					8×4						http://5.35.85.163/api/upload/img4618jpg_1718193352860.jpg	1	2024-06-12 11:57:17.868261	2024-06-12 11:57:17.868261	Howo T5G	t	2024		10400000	Красный, серый	\N
 9	Самосвал	HOWO	440 л.с / Дизель	Механическая		2-х местная с 1 спальным					6×4						http://5.35.85.163/api/upload/img14618jpg_1718193796887.jpg	1	2024-06-12 12:03:25.793559	2024-06-12 12:03:25.793559	Howo T5G	t	2024		9700000	Красный, серый	\N
@@ -646,9 +802,19 @@ COPY public.products (id, category, brand, engine, transmission, max_weight, cab
 12	Самосвал	FAW	11.05 л. / 420 л.с / дизель	Механическая		2-х местная с 1 спальным					8 х 4						http://5.35.85.163/api/upload/faw-j6jpg_1718195632063.jpg	1	2024-06-12 12:33:56.652855	2024-06-12 12:33:56.652855	FAW J6	t	2023		9050000	Белый	\N
 13	Полуприцеп рефрижератор	Krone	30.0 т				Пневматическая							90 м³	13310 мм		http://5.35.85.163/api/upload/img454618jpg_1718195923079.jpg	1	2024-06-12 12:38:45.639798	2024-06-12 12:38:45.639798	Krone Cool Liner	t	2024		11300000		\N
 14	Полуприцеп рефрижератор	Krone												90 м³	13600 мм		http://5.35.85.163/api/upload/krone-sdjpg_1718196197884.jpg	1	2024-06-12 12:43:21.844296	2024-06-12 12:43:21.844296	Krone SD	t	2024		6100000	Серебристый	\N
-15	Полуприцеп рефрижератор	Krone	34.0 т											90 м³	13600 мм		http://5.35.85.163/api/upload/krone-sd-2023jpg_1718196423038.jpg	1	2024-06-12 12:47:43.178414	2024-06-12 12:47:43.178414	Krone SD	t	2023		5700000	Синий	\N
 5	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					6×4						https://vladdizlaw.store/api/upload/img-20240405-wa0098jpg_1718192386041.jpg	1	2024-06-12 11:39:53.850115	2024-06-12 11:39:53.850115	Shacman X5000	t	2023		9600000	Белый	\N
-6	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					8*4						https://vladdizlaw.store/api/upload/photo62024-04-1910-16-53jpg_1718649811619.jpg	1	2024-06-12 11:48:30.809058	2024-06-17 18:43:32.988058	Shacman Х3000	t	2023		9700000	Зеленый	\N
+24	Самосвал	Shacman				6х4											https://vladdizlaw.store/api/upload/photo2024-04-1821-37-26jpg_1718722904257.jpg	1	2024-06-18 13:46:21.25407	2024-06-18 17:09:25.599141	Shacman X5000	t		Цвет, Модель, Спецификация 	8000000		{https://vladdizlaw.store/api/upload/photo62024-04-1910-16-53jpg_1718722835173.jpg}
+4	Самосвал	Shacman	10.8 л / 430 л.с. / Дизель \\Weichai	Механическа		2-х местная с 1 спальным					6*4						https://vladdizlaw.store/api/upload/img-20240405-wa0089jpg_1718717297580.jpg	1	2024-06-12 11:29:05.60685	2024-06-18 13:28:19.620131	Shacman Х5000	t	2023		9650000	Золотистый	\N
+15	Полуприцеп рефрижератор	Krone	34.0 т											90 м³	13600 мм		http://5.35.85.163/api/upload/krone-sd-2023jpg_1718196423038.jpg	1	2024-06-12 12:47:43.178414	2024-06-18 13:42:02.571738	Krone SD	f	2023		5700000	Синий	\N
+6	Самосвал	Shacman	10.8 л / 440 л.с. / Дизель \\Cummins	Механическая		2-х местная с 1 спальным					8*4						https://vladdizlaw.store/api/upload/photo52024-04-1910-16-53jpg_1718722730836.jpg	1	2024-06-12 11:48:30.809058	2024-06-18 14:59:00.549883	Shacman Х3000	t	2023	Доп, Доп, Доп	9700000	Зеленый	{https://vladdizlaw.store/api/upload/photo62024-04-1910-16-53jpg_1718722734270.jpg,https://vladdizlaw.store/api/upload/photo2024-04-1909-43-30jpg_1718722734864.jpg,https://vladdizlaw.store/api/upload/photo2024-04-1821-37-26jpg_1718722736887.jpg}
+\.
+
+
+--
+-- Data for Name: vacancies; Type: TABLE DATA; Schema: public; Owner: autopartner_admin
+--
+
+COPY public.vacancies (id, title, description_1, description_2, description_3, description_4, description_5, description_6, description_7, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -657,6 +823,20 @@ COPY public.products (id, category, brand, engine, transmission, max_weight, cab
 --
 
 SELECT pg_catalog.setval('public.accounts_id_seq', 3, true);
+
+
+--
+-- Name: event_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
+--
+
+SELECT pg_catalog.setval('public.event_details_id_seq', 1, false);
+
+
+--
+-- Name: events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
+--
+
+SELECT pg_catalog.setval('public.events_id_seq', 1, false);
 
 
 --
@@ -670,7 +850,7 @@ SELECT pg_catalog.setval('public.feedbacks_id_seq', 3, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 3, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 4, true);
 
 
 --
@@ -684,7 +864,14 @@ SELECT pg_catalog.setval('public.news_id_seq', 2, true);
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 23, true);
+SELECT pg_catalog.setval('public.products_id_seq', 24, true);
+
+
+--
+-- Name: vacancies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: autopartner_admin
+--
+
+SELECT pg_catalog.setval('public.vacancies_id_seq', 1, false);
 
 
 --
@@ -701,6 +888,22 @@ ALTER TABLE ONLY public.products
 
 ALTER TABLE ONLY public.news
     ADD CONSTRAINT "PK_39a43dfcb6007180f04aff2357e" PRIMARY KEY (id);
+
+
+--
+-- Name: vacancies PK_3b45154a366568190cc15be2906; Type: CONSTRAINT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.vacancies
+    ADD CONSTRAINT "PK_3b45154a366568190cc15be2906" PRIMARY KEY (id);
+
+
+--
+-- Name: events PK_40731c7151fe4be3116e45ddf73; Type: CONSTRAINT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY (id);
 
 
 --
@@ -744,6 +947,14 @@ ALTER TABLE ONLY public.brands
 
 
 --
+-- Name: event_details PK_e7753a530518edb90d77d0919a1; Type: CONSTRAINT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.event_details
+    ADD CONSTRAINT "PK_e7753a530518edb90d77d0919a1" PRIMARY KEY (id);
+
+
+--
 -- Name: accounts accounts_login_key; Type: CONSTRAINT; Schema: public; Owner: autopartner_admin
 --
 
@@ -773,6 +984,14 @@ ALTER TABLE ONLY public.products
 
 ALTER TABLE ONLY public.products
     ADD CONSTRAINT "FK_c3932231d2385ac248d0888d955" FOREIGN KEY (category) REFERENCES public.categories(name) ON DELETE CASCADE;
+
+
+--
+-- Name: event_details FK_c760e9ad9dbcc99f55b5a858775; Type: FK CONSTRAINT; Schema: public; Owner: autopartner_admin
+--
+
+ALTER TABLE ONLY public.event_details
+    ADD CONSTRAINT "FK_c760e9ad9dbcc99f55b5a858775" FOREIGN KEY (event_id) REFERENCES public.events(id) ON DELETE CASCADE;
 
 
 --
