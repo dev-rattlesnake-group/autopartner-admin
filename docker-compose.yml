@@ -105,20 +105,31 @@ services:
       - /usr/src/app/node_modules
     
 
-  autopartner_nginx:
-    container_name: autopartner-nginx
+  nginx:
+    container_name: nginx_proxy
     restart: unless-stopped
-    build:
-      context: ./nginx
+    image: nginx:alpine
     depends_on:
       autopartner_web:
         condition: service_started
+    volumes:
+    - ./data/nginx:/etc/nginx/conf.d
+    - ./data/certbot/conf:/etc/letsencrypt
+    - ./data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"    
     networks:
       - autopartner-network
-    ports:
-      - "80:80"   
-
- 
+  
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - autopartner-network	
 
 volumes:
   pgdata:

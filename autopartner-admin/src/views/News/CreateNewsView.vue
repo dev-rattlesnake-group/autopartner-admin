@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { reactive, onMounted, ref, watch } from 'vue'
-import { useProductStore } from '@/stores/product.store'
 import BulkIcon from '@/assets/icons/BulkIcon.vue'
 import { message } from 'ant-design-vue'
 import { authHeader } from '@/services/auth-header.service'

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref, watch } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import router from '@/router'
 import BulkIcon from '@/assets/icons/BulkIcon.vue'
 import { message } from 'ant-design-vue'
 import { authHeader } from '@/services/auth-header.service'
 import type { UploadChangeParam } from 'ant-design-vue'
 import { useNewsStore } from '@/stores/news.store'
-import moment from 'moment'
+
 
 
 const API_URL = import.meta.env.VITE_API_URL
