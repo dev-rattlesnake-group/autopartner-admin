@@ -181,10 +181,10 @@ const handleChange = (info: UploadChangeParam) => {
             placeholder="Название" :class="{ 'border border-red-500 ': errors.title }" />
 
           <div class="flex flex-col w-full items-start gap-4">
-          
+
             <textarea type="text" rows="13" cols="5" v-model="productForm.description"
               class="resizeable leading-normal rounded-md w-full py-4 px-4 bg-[#EFF1F999]" placeholder="Описание" />
-  <p class="leading-[100%] text-gray-400 text-sm">Дата истечения акции</p>
+            <p class="leading-[100%] text-gray-400 text-sm">Дата истечения акции</p>
             <a-date-picker v-model:value="productForm.expired_date" valueFormat="YYYY-MM-DD" />
           </div>
 
@@ -223,7 +223,7 @@ const handleChange = (info: UploadChangeParam) => {
           <div class="w-full flex items-end gap-6 justfy-self-end self-endh-full flex-col lg:flex-row">
 
             <button
-              class="lg:px-8 px-4 w-fit py-3 bg-[#c40f30] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
+              class="lg:px-8 px-4 w-fit py-3 bg-[#005534] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
               @click="updateProduct()">
               Сохранить
             </button>

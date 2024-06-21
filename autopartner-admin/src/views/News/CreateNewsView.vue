@@ -111,7 +111,7 @@ const handleChange = (info: UploadChangeParam) => {
           <div class="w-full flex items-end gap-6 justfy-self-end self-endh-full flex-col lg:flex-row">
 
             <button
-              class="lg:px-8 px-4 w-fit py-3 bg-[#c40f30] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
+              class="lg:px-8 px-4 w-fit py-3 bg-[#005534] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
               @click="createProduct()">
               Создать
             </button>

@@ -30,7 +30,7 @@ const productForm = reactive({
   brand: 'Выберите брэнд',
   name: '',
   in_stock: true,
-  price: '',
+  price: null,
   engine: '',
   vehicles_year: '',
   transmission: '',
@@ -168,14 +168,15 @@ const handleChange = (info: UploadChangeParam) => {
               {{ category }}
             </option>
           </select>
-          <div class="w-full flex gap-4 items-start leading-normal">
-            <input type="number" v-model="productForm.price" class="rounded-md w-full h-[3rem] px-4 bg-[#EFF1F999]"
-              placeholder="Цена" :class="{ 'border border-red-500 ': errors.price }" />
-            <div class="leading-normal flex">
-              <input type="checkbox" v-model="productForm.in_stock"
-                class="rounded-md w-full h-[1rem] px-4 bg-[#EFF1F999]" label="В наличие" />
+          <div class="w-full flex gap-4 items-start leading-normal justify-between flex-wrap">
+            <input type="number" v-model="productForm.price"
+              class="rounded-md  w-full lg:w-[50%] h-[3rem] px-4 bg-[#EFF1F999]" placeholder="Цена"
+              :class="{ 'border border-red-500 ': errors.price }" />
+            <div class="leading-normal flex w-[39%] gap-2 justify-end">
+              <input type="checkbox" v-model="productForm.in_stock" class="rounded-md  h-[1rem] px-4"
+                label="В наличие" />
 
-              <p class="text-sm mt-[-4px]">Товар в наличие</p>
+              <p class="text-sm mt-[-4px]">Товар в наличии</p>
             </div>
 
           </div>
@@ -212,7 +213,7 @@ const handleChange = (info: UploadChangeParam) => {
           <div class="w-full flex items-end gap-6 justfy-self-end self-endh-full flex-col lg:flex-row">
 
             <button
-              class="lg:px-8 px-4 w-fit py-3 bg-[#c40f30] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
+              class="lg:px-8 px-4 w-fit py-3 bg-[#005534] text-gray-500 rounded-xl leading-[100%] text-[14px] text-white hover:opacity-75"
               @click="createProduct()">
               Создать
             </button>
@@ -225,7 +226,7 @@ const handleChange = (info: UploadChangeParam) => {
         :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
         <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
           <BulkIcon class="mt-[4rem]" />
-          <p class="upload-text text-xl font-semibold text-[#c40f30] mt-4">Upload Image</p>
+          <p class="upload-text text-xl font-semibold text-[#005534] mt-4">Upload Image</p>
           <p class="ant-upload-hint">Upload image to your product.</p>
           <p class="ant-upload-hint mt-[-0.3rem]">
             File Format <span class="font-semibold">jpeg</span>

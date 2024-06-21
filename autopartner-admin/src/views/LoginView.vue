@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import { onMounted, reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import router from '@/router'
+import Logo from '@/assets/Logo.vue'
 const emit = defineEmits(['header-data'])
 const authStore = useAuthStore()
 
@@ -48,13 +49,15 @@ const signIn = async () => {
   <div class="login-wrapper">
     <div class="login-panel">
       <div class="login-panel_title">
-        <p class="login-title">Welcome back!</p>
-        <p class="login-greetings">Login to your account</p>
+        <div class="w-full flex justify-center">
+          <Logo class="  w-[max(44%,4rem)] max-h-[90%] cursor-pointer " @click="toLogin" />
+        </div>
+
       </div>
       <!-- <form class="login-panel_input"> -->
       <a-form :model="formState" name="normal_login" class="login-panel_input" @finish="signIn">
         <a-form-item name="email" :rules="[{ required: true, message: 'Enter your email' }]">
-          <a-input class="email" autocomplete v-model:value="formState.email" placeholder="Email Address">
+          <a-input class="email" autocomplete v-model:value="formState.email" placeholder="Login">
             <template #prefix>
               <message-icon />
             </template>
@@ -196,7 +199,7 @@ const signIn = async () => {
         // width: fit-content;
         height: 3.2rem;
         border-radius: 12px;
-        background: #c40f30;
+        background-color: #005534;
         color: #fff;
         text-align: center;
         font-family: Inter;
@@ -207,7 +210,7 @@ const signIn = async () => {
         padding: 0 3.5rem 0 3.5rem;
 
         &:hover {
-          background-color: #9e2e2e;
+          opacity: 0.75
         }
       }
     }

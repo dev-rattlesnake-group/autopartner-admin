@@ -1,5 +1,5 @@
 <script setup>
-import LogoShort from '@/assets/LogoShort.vue'
+import Logo from '@/assets/Logo.vue'
 const props = defineProps({
   title: { type: String },
   crumbs: { type: Array, default: () => [] },
@@ -18,8 +18,8 @@ import router from '@/router'
 
 const productStore = useCustomerProductStore()
 const toHome = () => {
-  if (authStore.user.role == 'admin') router.push({ name: 'dashboard' })
-  else if (authStore.user.role == 'customer') router.push({ name: 'catalogue' })
+  if (authStore.user.role == 'admin') router.push({ name: 'products' })
+
 }
 const toLogin = () => {
   router.push({ name: 'login' })
@@ -41,8 +41,8 @@ console.log(router.currentRoute)
 </script>
 <template>
   <div class="header-wrapper">
-    <div class="header-logo items-center justify-center ">
-      <!-- <LogoShort class="ml-4 md:ml-0 w-[40%] md:w-[max(60%,8.5rem)] xl:w-[max(78%,11rem)]  cursor-pointer "  @click="toLogin"/> -->
+    <div class="header-logo items-center justify-center " v-show="router.currentRoute.value.name !== 'login'">
+      <Logo class=" md:ml-4 md:w-[44%] w-[min(44%,4rem)] max-h-[90%] cursor-pointer " @click="toLogin" />
     </div>
     <div class="header-main">
       <div class="header-main-up" v-show="props.screenWidth > 850">

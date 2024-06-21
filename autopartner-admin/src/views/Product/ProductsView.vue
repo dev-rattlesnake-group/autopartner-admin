@@ -690,14 +690,14 @@ const openUpdateBrand = async (category: string) => {
           <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.categories"
             :key="ind">
             <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
-            <div class="flex gap-4">
+            <div class="flex gap-4 ">
               <button @click="openUpdateCategory(category)"
-                class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
+                class="bg-green-500 min-w-5 text-white h-[1rem] flex items-center justify-center  rounded-md hover:opacity-75 min-w-5">E
               </button>
               <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
                 @confirm="confirm(category)">
                 <button
-                  class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
+                  class="bg-red-500 min-w-5 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
                 </button>
               </a-popconfirm>
 
@@ -706,7 +706,7 @@ const openUpdateBrand = async (category: string) => {
 
         </div>
         <button @click="openCategoryModalCreate"
-          class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
+          class="bg-[#005534] text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
           категорию</button>
       </div>
       <div class="w-[20rem] h-[14rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
@@ -716,12 +716,12 @@ const openUpdateBrand = async (category: string) => {
             <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
             <div class="flex gap-4">
               <button @click="openUpdateBrand(category)"
-                class="bg-green-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
+                class="bg-green-500 min-w-5 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">E
               </button>
               <a-popconfirm title="Вы уверены что хотите удалить ресурс?" ok-text="Да" cancel-text="Нет"
                 @confirm="confirmBrand(category)">
                 <button
-                  class="bg-red-500 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
+                  class="bg-red-500 min-w-5 text-white h-[1rem] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75">X
                 </button>
               </a-popconfirm>
 
@@ -730,12 +730,12 @@ const openUpdateBrand = async (category: string) => {
 
         </div>
         <button @click="openBrandModalCreate"
-          class="bg-red-500 text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
+          class="bg-[#005534] text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
           брэнд</button>
       </div>
     </div>
     <div class=" w-full  flex flex-col gap-4 ml-4 items-end px-4 lg:px-4 ">
-      <button class="cutomer-header_btn bg-[#c40f30] w-fit px-4 text-white" @click="handleCreateProduct">
+      <button class="cutomer-header_btn bg-[#005534] w-fit px-4 text-white" @click="handleCreateProduct">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

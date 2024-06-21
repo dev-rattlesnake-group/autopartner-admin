@@ -19,9 +19,9 @@ const adminMenuData = [
 
   { title: 'Продукты', route: 'products', icon: 'BagIcon' },
   { title: 'Новости', route: 'news', icon: 'FolderIcon' },
-  { title: 'Отзывы', route: 'feedbacks', icon: 'CategoryIcon' },
+  { title: 'Отзывы', route: 'feedbacks', icon: 'FavoriteIcon' },
   { title: 'Вакансии', route: 'vacancies', icon: 'UsersIcon' },
-  { title: 'Акции', route: 'events', icon: 'FavoriteIcon' },
+  { title: 'Акции', route: 'events', icon: 'CategoryIcon' },
 
 ]
 const customerMenuData = [
@@ -115,7 +115,7 @@ onMounted(async () => {
 
     & :deep(.ant-menu-item-selected) {
       // border:2px solid black;
-      background-color: #c40f30 !important;
+      background-color: #005534 !important;
 
 
       color: white;
