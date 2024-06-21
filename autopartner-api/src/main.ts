@@ -30,6 +30,8 @@ async function bootstrap() {
             'https://main--frabjous-souffle-3a27d9.netlify.app/catalog',
             'https://main--frabjous-souffle-3a27d9.netlify.app/news',
             'https://main--frabjous-souffle-3a27d9.netlify.app/feedbacks',
+            'http://www.autopartner.hellorf6.beget.tech',
+            'https://www.autopartner.hellorf6.beget.tech/',
         ],
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
