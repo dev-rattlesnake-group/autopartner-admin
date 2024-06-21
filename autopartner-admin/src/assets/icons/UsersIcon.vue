@@ -1,45 +1,11 @@
 <template>
-  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g id="2 User">
-      <path
-        id="Stroke 1"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M6.98675 11.4624C10.2146 11.4624 12.9735 11.9515 12.9735 13.9054C12.9735 15.8593 10.233 16.3624 6.98675 16.3624C3.758 16.3624 1 15.8777 1 13.9229C1 11.9682 3.73963 11.4624 6.98675 11.4624Z"
-        :stroke="props.color"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        id="Stroke 3"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M6.9868 8.67375C4.86755 8.67375 3.14905 6.95613 3.14905 4.83688C3.14905 2.71763 4.86755 1 6.9868 1C9.10517 1 10.8237 2.71763 10.8237 4.83688C10.8315 6.94825 9.1253 8.66588 7.01392 8.67375H6.9868Z"
-        :stroke="props.color"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        id="Stroke 5"
-        d="M13.0168 7.67786C14.4177 7.48098 15.4966 6.27873 15.4992 4.82361C15.4992 3.38948 14.4536 2.19948 13.0825 1.97461"
-        :stroke="props.color"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        id="Stroke 7"
-        d="M14.8651 11.0471C16.2222 11.2492 17.1699 11.7252 17.1699 12.7052C17.1699 13.3799 16.7236 13.8174 16.0026 14.0912"
-        :stroke="props.color"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </g>
+  <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path id="Vector"
+      d="M13.5 2.25001H7.54523L5.625 0.329771C5.52091 0.224851 5.39701 0.141667 5.26049 0.0850551C5.12397 0.0284434 4.97756 -0.000466481 4.82977 5.69176e-06H1.125C0.826631 5.69176e-06 0.540483 0.118532 0.329505 0.329511C0.118526 0.540489 0 0.826637 0 1.12501V11.2936C0.000372087 11.5803 0.114425 11.8551 0.317147 12.0579C0.51987 12.2606 0.794714 12.3746 1.08141 12.375H13.5626C13.8442 12.3746 14.1143 12.2626 14.3134 12.0634C14.5126 11.8643 14.6246 11.5942 14.625 11.3126V3.37501C14.625 3.07664 14.5065 2.79049 14.2955 2.57951C14.0845 2.36853 13.7984 2.25001 13.5 2.25001ZM1.125 1.12501H4.82977L5.95477 2.25001H1.125V1.12501ZM13.5 11.25H1.125V3.37501H13.5V11.25Z"
+      :fill="props.color" />
   </svg>
+
 </template>
 <script setup>
-const props= defineProps({color:{type:String, default:'#53545C'}})
+const props = defineProps({ color: { type: String, default: '#53545C' } })
 </script>

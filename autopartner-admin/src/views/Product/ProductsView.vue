@@ -141,6 +141,15 @@ const columns = ref<Record<string, any>[]>([
     // filteredValue: state.filters?.phone || null
   },
   {
+    title: 'Доп инфо',
+    dataIndex: 'options',
+    key: 'options',
+    resizable: true,
+    width: 270
+    // filteredValue: state.filters?.status_id || null
+  },
+
+  {
     title: 'Разрешённая макс. масса',
     dataIndex: 'max_weight',
     key: 'max_weight',
@@ -249,14 +258,6 @@ const columns = ref<Record<string, any>[]>([
     width: 50
     // filteredValue: state.filters?.status_id || null
   },
-  {
-    title: 'Доп инфо',
-    dataIndex: 'options',
-    key: 'options',
-    resizable: true,
-    width: 50
-    // filteredValue: state.filters?.status_id || null
-  },
 
 ])
 
@@ -307,7 +308,7 @@ const columnsMobile = ref([
     // filteredValue: state.filters?.email || null
   },
   {
-    title: 'В наличие',
+    title: 'В наличии',
     dataIndex: 'in_stock',
     key: 'in_stock',
     resizable: true,
@@ -710,7 +711,7 @@ const openUpdateBrand = async (category: string) => {
           категорию</button>
       </div>
       <div class="w-[20rem] h-[14rem] bg-white rounded-md flex flex-col gap-2 leading-normal justify-between p-4">
-        <p class="text-lg font-semibold">Брэнды</p>
+        <p class="text-lg font-semibold">Бренды</p>
         <div class="w-full h-fit flex flex-col items-start px-4 max-h-[12rem] overflow-y-auto ">
           <div class="w-full text-left flex justify-between" v-for="category, ind in productStore.brands" :key="ind">
             <p class="hover:text-blue-500 cursor-pointer"> {{ category }}</p>
@@ -731,7 +732,7 @@ const openUpdateBrand = async (category: string) => {
         </div>
         <button @click="openBrandModalCreate"
           class="bg-[#005534] text-white w-[95%] flex items-center justify-center p-[0.2rem] rounded-md hover:opacity-75 py-1">Создать
-          брэнд</button>
+          брeнд</button>
       </div>
     </div>
     <div class=" w-full  flex flex-col gap-4 ml-4 items-end px-4 lg:px-4 ">

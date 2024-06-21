@@ -41,8 +41,8 @@ console.log(router.currentRoute)
 </script>
 <template>
   <div class="header-wrapper">
-    <div class="header-logo items-center justify-center " v-show="router.currentRoute.value.name !== 'login'">
-      <Logo class=" md:ml-4 md:w-[44%] w-[min(44%,4rem)] max-h-[90%] cursor-pointer " @click="toLogin" />
+    <div class="header-logo items-center justify-centers" v-show="router.currentRoute.value.name !== 'login'">
+      <Logo class=" md:w-[30%] w-[min(44%,4rem)] max-h-[90%] cursor-pointer " @click="toLogin" />
     </div>
     <div class="header-main">
       <div class="header-main-up" v-show="props.screenWidth > 850">
@@ -197,7 +197,7 @@ console.log(router.currentRoute)
     height: auto;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     padding-left: 1rem;
   }
 }
