@@ -31,6 +31,9 @@ export class Feedbacks extends BaseEntity {
     @Column({ type: 'varchar', nullable: true })
     company: string
 
+    @Column({ type: 'varchar', nullable: true })
+    image_url: string
+
     @CreateDateColumn({ nullable: true })
     created_at: Date
 

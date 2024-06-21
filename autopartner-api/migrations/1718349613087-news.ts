@@ -31,6 +31,11 @@ export class News1718349613087 implements MigrationInterface {
                         type: 'date',
                     },
                     {
+                        name: 'image_url',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
                         name: 'created_at',
                         type: 'timestamp',
                         default: 'now()',

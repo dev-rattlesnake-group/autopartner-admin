@@ -347,6 +347,7 @@ watch(
           <template v-if="column?.key === 'id'">
             <div class="text-sm hover:text-blue-500  cursor-pointer"
               @click="router.push({ name: 'updateFeedback', params: { id: record.id } })">
+
               <p class="text-xs md:text-sm"> {{
                 record.id }}</p>
             </div>
@@ -354,7 +355,13 @@ watch(
 
           <template v-if="column?.key === 'title'">
             <div class="cursor-pointer flex items-center gap-4">
-
+              <div
+                class="mt-2 min-w-[2.5rem] max-w-[2.5rem] border-2 rounded-md overflow-hidden flex items-center justify-center"
+                :class="{ 'h-fit': record.image_url, 'h-[2.5rem]': !record.image_url && !record.image_urls?.length }">
+                <img v-if="record.image_url || record.image_urls?.length"
+                  :src="record.image_url ? record.image_url : record.image_urls?.[0]" alt="" />
+                <p v-else class="text-xs font-semibold text-center">No Image</p>
+              </div>
               <p class="text-xs md:text-sm hover:text-blue-500">{{ record.title }}</p>
             </div>
           </template>

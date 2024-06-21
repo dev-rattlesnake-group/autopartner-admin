@@ -765,26 +765,7 @@ const openUpdateBrand = async (category: string) => {
           </div>
         </template>
         <template #bodyCell="{ column, record }">
-          <template v-if="column?.key === 'status'">
-            <div
-              class="text-xs md:text-sm py-[0.2rem] px-[0.7rem] border rounded-lg flex items-center justify-center w-fit font-semibold"
-              :class="{
-                'bg-[#EBEBEB] text-gray-600': record.status == 'draft',
-                'bg-green-200 text-green-600': record.status == 'published'
-              }">
-              {{ record.status }}
-            </div>
-          </template>
-          <template v-if="column?.key === 'stock'">
-            <div
-              class="text-xs md:text-sm  py-[0.2rem] px-[0.7rem] whitespace-nowrap rounded-lg flex items-center justify-center w-fit h-fit"
-              :class="{
-                'bg-green-100 text-green-600': record.stock > 0,
-                'bg-[#F57E77] text-red-600': record.stock <= 0
-              }">
-              {{ record.stock > 0 ? `In-Stock: ${record.stock}` : `Out of Stock` }}
-            </div>
-          </template>
+
           <template v-if="column?.key === 'category'">
             <p class="text-xs md:text-sm">{{ record.category }}</p>
           </template>
@@ -801,11 +782,7 @@ const openUpdateBrand = async (category: string) => {
               <p class="text-xs md:text-sm"> {{ record.id }}</p>
             </div>
           </template>
-          <template v-if="column?.key === 'in_stock'">
-            <div class="text-sm">
-              <p class="text-xs md:text-sm"> {{ record.in_stock ? 'Да' : 'Нет' }}</p>
-            </div>
-          </template>
+
           <template v-if="column?.key === 'name'">
             <div class="cursor-pointer flex items-center gap-4"
               @click="router.push({ name: 'updateProduct', params: { id: record.id } })">

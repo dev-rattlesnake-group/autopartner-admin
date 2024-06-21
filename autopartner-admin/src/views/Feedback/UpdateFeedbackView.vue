@@ -20,6 +20,7 @@ const productForm = reactive({
   content: '',
   company: '',
   date: null,
+  image_url: ''
 })
 const errors = reactive({
   author: false,
@@ -67,26 +68,17 @@ onMounted(async () => {
   await productStore.getOneFeedback(Number(router?.currentRoute?.value?.params?.id))
   Object.keys(productForm).forEach(formProperty => {
     switch (formProperty) {
-      // case 'date': {
-      //   // const date = new Date(productStore.new?.[formProperty])
-      //   // const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'short' });
-      //   // const formattedDate = formatter.format(date);
-      //   // productForm[formProperty] = formattedDate
-      //   // console.log(productForm['date'])
-      //   break
-      // }
+      case 'image_url': {
+        if (productStore.feedback?.[formProperty]) {
+          productForm[formProperty] = productStore.feedback?.[formProperty]
+          const [, fileName] = productStore.feedback?.[formProperty].split('upload/')
+          fileList.value.push({ uuid: 1, name: fileName, url: productStore.feedback?.[formProperty] })
+          break
+        }
 
-      // case 'image_url': {
-      //   if (productStore.new?.[formProperty]) {
-      //     productForm[formProperty] = productStore.new?.[formProperty]
-      //     const [, fileName] = productStore.new?.[formProperty].split('upload/')
-      //     fileList.value.push({ uuid: 1, name: fileName, url: productStore.new?.[formProperty] })
-      //     break
-      //   }
+        break
 
-      //   break
-
-      // }
+      }
       // case 
       default: productForm[formProperty] = productStore.feedback?.[formProperty]
 
@@ -98,7 +90,18 @@ onMounted(async () => {
 })
 
 
+const handleChange = (info: UploadChangeParam) => {
+  console.log({ info })
+  if (info.file.status === 'removed') {
+    productForm.image_url = ''
 
+  } else if (info.file.status === 'done') {
+    message.success(`${info.file.name} file uploaded successfully`)
+    productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+  } else if (info.file.status === 'error') {
+    message.error(`${info.file.name} file upload failed.`);
+  }
+};
 
 
 const updateProduct = async () => {
@@ -161,6 +164,19 @@ const deleteProduct = async () => {
         </div>
       </div>
 
+    </div>
+    <div class="md:w-[39%] w-full rounded-lg bg-white h-full flex flex-col p-6">
+      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="false"
+        :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
+        <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
+          <BulkIcon class="mt-[4rem]" />
+          <p class="upload-text text-xl font-semibold text-[#c40f30] mt-4">Upload Image</p>
+          <p class="ant-upload-hint">Upload image to your product.</p>
+          <p class="ant-upload-hint mt-[-0.3rem]">
+            File Format <span class="font-semibold">jpeg</span>
+          </p>
+        </div>
+      </a-upload-dragger>
     </div>
   </div>
 </template>

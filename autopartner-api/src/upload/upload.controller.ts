@@ -17,7 +17,7 @@ import { Role } from 'src/constant/role.enum'
 import { RolesGuard } from 'src/auth/guards/role.guard'
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard'
 const MAX_IMAGE_SIZE_IN_BYTES = 4 * 1024 * 1024
-const VALID_UPLOADS_MIME_TYPES = ['image/jpeg', 'image/png']
+const VALID_UPLOADS_MIME_TYPES = ['image/jpeg', 'image/png', 'image/svg+xml']
 import { generateFileName } from './helpers/generate-file-name.helper'
 import { FileTypeValidationPipe } from 'src/pipe/file-type-validation.pipe'
 
@@ -38,7 +38,7 @@ export class UploadController {
         })
     )
     public async uploadFile(
-        @UploadedFile(new FileTypeValidationPipe(['image/jpeg', 'image/png']))
+        @UploadedFile(new FileTypeValidationPipe(VALID_UPLOADS_MIME_TYPES))
         file: Express.Multer.File
     ) {
         console.log(file)

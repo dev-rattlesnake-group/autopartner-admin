@@ -29,6 +29,7 @@ const productForm = reactive({
   content: '',
   company: '',
   date: null,
+  image_url: null,
 })
 const errors = reactive({
   author: false,
@@ -78,15 +79,15 @@ const createProduct = async () => {
   }
 }
 
-// const handleChange = (info: UploadChangeParam) => {
+const handleChange = (info: UploadChangeParam) => {
 
-//   if (info.file.status === 'done') {
-//     message.success(`${info.file.name} file uploaded successfully`)
-//     productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
-//   } else if (info.file.status === 'error') {
-//     message.error(`${info.file.name} file upload failed.`);
-//   }
-// };
+  if (info.file.status === 'done') {
+    message.success(`${info.file.name} file uploaded successfully`)
+    productForm.image_url = `${API_URL}/upload/` + info.file.response?.data
+  } else if (info.file.status === 'error') {
+    message.error(`${info.file.name} file upload failed.`);
+  }
+};
 </script>
 <template>
   <div
@@ -122,7 +123,19 @@ const createProduct = async () => {
         </div>
       </div>
     </div>
-
+    <div class="md:w-[39%] w-full rounded-lg bg-white h-full flex flex-col p-6">
+      <a-upload-dragger v-model:fileList="fileList" listType="picture" name="file" :multiple="false"
+        :action="`${API_URL}/upload/image`" :headers="headers" @change="handleChange">
+        <div class="w-full flex flex-col items-center min-h-[50%] pb-[4rem]">
+          <BulkIcon class="mt-[4rem]" />
+          <p class="upload-text text-xl font-semibold text-[#c40f30] mt-4">Upload Image</p>
+          <p class="ant-upload-hint">Upload image to your product.</p>
+          <p class="ant-upload-hint mt-[-0.3rem]">
+            File Format <span class="font-semibold">jpeg</span>
+          </p>
+        </div>
+      </a-upload-dragger>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">

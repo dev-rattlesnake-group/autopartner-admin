@@ -8,6 +8,7 @@ export interface IFeedback {
   content: string
   company?: string
   date: Date
+  image_url?: string
   created_at?: string
   updated_at?: string
 }
