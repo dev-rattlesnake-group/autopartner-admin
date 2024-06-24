@@ -5,8 +5,10 @@ const ProductsView = () => import('@/views/Product/ProductsView.vue')
 const CreateProductView = () => import('@/views/Product/CreateProductView.vue')
 const UpdateProductView = () => import('@/views/Product/UpdateProductView.vue')
 const NewsView = () => import('@/views/News/NewsView.vue')
-import Routes from '@/router/routes.constants'
 const CreateNewsView = () => import('@/views/News/CreateNewsView.vue')
+import Routes from '@/router/routes.constants'
+const CreateCustomerView = () =>
+  import('@/views/Customer/CreateCustomerView.vue')
 const UpdateNewsView = () => import('@/views/News/UpdateNewsView.vue')
 const FeedbackView = () => import('@/views/Feedback/FeedbackView.vue')
 const FeedbackCreateView = () =>
@@ -36,12 +38,17 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      redirect: 'customers',
+      redirect: 'accounts',
     },
     {
-      path: '/admin/customers',
-      name: 'customers',
+      path: '/admin/accounts',
+      name: 'accounts',
       component: CustomersView,
+    },
+    {
+      path: '/admin/accounts/create',
+      name: 'createAccount',
+      component: CreateCustomerView,
     },
 
     {

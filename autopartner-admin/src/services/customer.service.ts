@@ -6,16 +6,14 @@ import type { ICreateCustomerDto, ICustomer } from '@/stores/customer.store'
 export default new (class CustomerService {
   async getCustomers(
     params: object
-  ): Promise<{ items: ICustomer[] | []; total: number }> {
+  ): Promise<{ data: ICustomer[] | []; meta: any }> {
     try {
-      const {
-        data: { accounts },
-      } = await axios.get(API_URL + '/accounts', {
+      const { data } = await axios.get(API_URL + '/accounts', {
         headers: authHeader(),
         params,
       })
-      console.log(accounts)
-      return accounts
+
+      return data
     } catch (error) {
       console.log({ error })
       throw error
@@ -26,7 +24,7 @@ export default new (class CustomerService {
   ): Promise<ICustomer> {
     try {
       const { data } = await axios.post(
-        API_URL + '/account',
+        API_URL + '/accounts',
         createCustomerDto,
         { headers: authHeader() }
       )
@@ -38,9 +36,35 @@ export default new (class CustomerService {
   }
   async getCustomer(id: string) {
     try {
-      const { data } = await axios.get(API_URL + `/account/${id}`, {
+      const { data } = await axios.get(API_URL + `/accounts/${id}`, {
         headers: authHeader(),
       })
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+  async changePassword(id: number, password: string) {
+    try {
+      const { data } = await axios.put(
+        API_URL + `/accounts/${id}`,
+        { password },
+        { headers: authHeader() }
+      )
+      return data
+    } catch (error) {
+      console.log({ error })
+      throw error
+    }
+  }
+  async updateCustomer(id: string, updateCustomerDto: any) {
+    try {
+      const { data } = await axios.patch(
+        API_URL + `/accounts/${id}`,
+        updateCustomerDto,
+        { headers: authHeader() }
+      )
       return data
     } catch (error) {
       console.log({ error })

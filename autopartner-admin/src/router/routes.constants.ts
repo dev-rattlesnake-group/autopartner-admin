@@ -1,4 +1,11 @@
 export default {
   public: ['/login'],
-  admin: ['/products', '/news', '/feedbacks', '/vacancies', '/events'],
+  admin: [
+    '/products',
+    '/news',
+    '/feedbacks',
+    '/vacancies',
+    '/events',
+    '/accounts',
+  ],
 }

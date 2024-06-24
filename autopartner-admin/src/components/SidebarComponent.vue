@@ -22,6 +22,7 @@ const adminMenuData = [
   { title: 'Отзывы', route: 'feedbacks', icon: 'FavoriteIcon' },
   { title: 'Вакансии', route: 'vacancies', icon: 'UsersIcon' },
   { title: 'Акции', route: 'events', icon: 'CategoryIcon' },
+  { title: 'Пользователи', route: 'accounts', icon: 'SettingIcon' },
 
 ]
 const customerMenuData = [

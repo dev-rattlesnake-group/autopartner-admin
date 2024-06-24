@@ -1,27 +1,68 @@
-<script setup>
+<script setup lang="ts">
 import { message } from 'ant-design-vue'
-import { useCustomerStore } from '@/stores/customer.store'
+
 import { reactive, onMounted, watch, ref, computed } from 'vue'
 import FilterIcon from '@/assets/icons/FilterIcon.vue'
 import SendIcon from '@/assets/icons/SendIcon.vue'
-import UsersIcon from '@/assets/icons/UsersIcon.vue'
 import BagIcon from '@/assets/icons/BagIcon.vue'
-import CustomerCreateComponent from './components/CustomerCreateComponent.vue'
+
 import router from '@/router'
+import { useNewsStore } from '@/stores/news.store'
+import type { Iparams } from '@/interfaces/params.interface'
+import { useCustomerStore } from '@/stores/customer.store'
 const props = defineProps({ screenWidth: { type: Number } })
-const customerStore = useCustomerStore()
+const productStore = useCustomerStore()
 const state = reactive({
-  filters: {},
+  filters: {} as Record<string, string>,
   page: 1,
   size: 10,
   search: '',
   sort: { field: 'id', order: 'desc' }
 })
 
-const isLoading = ref(false)
+
+const openPasswordModal = ref(false)
+const newPassword = ref('')
+const newPasswordRepeat = ref('')
+const selectedAccountId = ref(0)
+
+const openPassword = (id: number) => {
+  selectedAccountId.value = id
+  openPasswordModal.value = true
+}
+
+
+const selectedFilterCategory = ref('All')
 const openCreateModal = ref(false)
 const emit = defineEmits(['header-data'])
-const columns = ref([
+
+// const handleFilter = async (e: string) => {
+//   selectedFilterCategory.value = e
+//   if (e == 'All') {
+//     delete state.filters?.category
+//   } else {
+//     state.filters['category'] = e
+//   }
+
+//   const params: Iparams = {
+//     filter: state.filters,
+//     page: state.page,
+//     take: state.size,
+//     sort: state.sort
+//   }
+//   await productStore.getProducts(params)
+//   emit('header-data', {
+//     title: 'Products',
+//     crumbs: [
+//       { name: 'Products', route: 'products' },
+//       { name: selectedFilterCategory.value, route: 'products' }
+//     ]
+//   })
+// }
+
+const isLoading = ref(false)
+
+const columns = ref < Record < string, any> [] > ([
   {
     title: 'ID',
     dataIndex: 'id',
@@ -30,163 +71,103 @@ const columns = ref([
     filterSearch: true,
     sortDirections: ['desc', 'asc'],
     sorter: true,
-    width: 40
+    width: 20
     // filteredValue: state.filters?.id || null
   },
+
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    resizable: true,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true,
-    width: 200
-    // fixed: 'left',
-  },
-  {
-    title: 'Company',
-    dataIndex: 'company',
-    key: 'company',
+    title: 'Логин',
+    dataIndex: 'login',
+    key: 'login',
     resizable: true,
     sortDirections: ['desc', 'asc'],
     sorter: true,
     filterSearch: true,
-    width: 200
+    width: 60
+
     // filteredValue: state.filters?.company || null
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email',
+    title: 'Пароль',
+    dataIndex: 'password_hash',
+    key: 'password_hash',
     resizable: true,
     sortDirections: ['desc', 'asc'],
     sorter: true,
     filterSearch: true,
-    width: 100
+    width: 60
     // filteredValue: state.filters?.email || null
   },
   {
-    title: 'Phone',
-    dataIndex: 'phone',
-    key: 'phone',
-    resizable: true,
-    filterSearch: true,
-    width: 100
-    // filteredValue: state.filters?.phone || null
-  },
-  {
-    title: 'All Orders',
-    dataIndex: 'all_orders',
-    key: 'all_orders',
-    resizable: true,
-    filterSearch: true,
-    sorter: true,
-    sortDirections: ['desc', 'asc'],
-    width: 100
-    // filteredValue: state.filters?.all_orders || null
-  },
-  {
-    title: 'Order Total',
-    dataIndex: 'order_total',
-    key: 'order_total',
-    resizable: true,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true,
-    width: 100
-    // filteredValue: state.filters?.order_total || null
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status_id',
-    key: 'status_id',
-    resizable: true,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true,
-    width: 100
-    // filteredValue: state.filters?.status_id || null
-  },
-  {
-    title: 'Customer Since',
+    title: 'Дата создания',
     dataIndex: 'created_at',
     key: 'created_at',
     resizable: true,
     filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true,
-    width: 140
-    // filteredValue: state.filters?.created_at || null
-  }
-])
-const columnsMobile = ref([
-  // {
-  //   title: 'ID',
-  //   dataIndex: 'id',
-  //   key: 'id',
-  //   // resizable: true,
-  //   filterSearch: true,
-  //   sortDirections: ['desc', 'asc'],
-  //   sorter: true,
-  //   width: 4
-  //   // filteredValue: state.filters?.id || null
-  // },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    width: 100,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true
-    // fixed: 'left',
+    width: 30
+    // filteredValue: state.filters?.phone || null
   },
 
 
-  {
-    title: 'All Orders',
-    dataIndex: 'all_orders',
-    key: 'all_orders',
-    width: 20,
-    filterSearch: true,
-    sorter: true,
-    sortDirections: ['desc', 'asc']
-    // filteredValue: state.filters?.all_orders || null
-  },
-  {
-    title: 'Order Total',
-    dataIndex: 'order_total',
-    key: 'order_total',
-    width: 40,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true
-    // filteredValue: state.filters?.order_total || null
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status_id',
-    key: 'status_id',
-    width: 40,
-    filterSearch: true,
-    sortDirections: ['desc', 'asc'],
-    sorter: true
-    // filteredValue: state.filters?.status_id || null
-  }
 ])
+
+const columnsMobile = ref([{
+  title: 'ID',
+  dataIndex: 'id',
+  key: 'id',
+  resizable: true,
+  filterSearch: true,
+  sortDirections: ['desc', 'asc'],
+  sorter: true,
+  width: 20
+  // filteredValue: state.filters?.id || null
+},
+
+{
+  title: 'Логин',
+  dataIndex: 'title',
+  key: 'title',
+  resizable: true,
+  sortDirections: ['desc', 'asc'],
+  sorter: true,
+  filterSearch: true,
+  width: 60
+
+  // filteredValue: state.filters?.company || null
+},
+{
+  title: 'Пароль',
+  dataIndex: 'password_hash',
+  key: 'password_hash',
+  resizable: true,
+  sortDirections: ['desc', 'asc'],
+  sorter: true,
+  filterSearch: true,
+  width: 60
+  // filteredValue: state.filters?.email || null
+},
+{
+  title: 'Дата создания',
+  dataIndex: 'created_at',
+  key: 'created_at',
+  resizable: true,
+  filterSearch: true,
+  width: 30
+  // filteredValue: state.filters?.phone || null
+},])
+
 const responsiveColumns = computed(() => {
-  if (props.screenWidth > 850) return columns.value
-  else return columnsMobile.value
+  if (props.screenWidth < 850) return columnsMobile.value
+  else return columns.value
 })
 
-const fetchCustomers = async () => {
+const fetchProducts = async () => {
   isLoading.value = true
   try {
-    await customerStore.getCustomers({ page: state.page, size: state.size, sort: state.sort })
+    await productStore.getCustomers({ page: state.page, take: state.size, sort: state.sort })
     columns.value.forEach((column) => {
-      let filters = customerStore.customers.map((customer) => {
-        return customer[column.key]
+      let filters = productStore.customers.map((product) => {
+        return product[column.key]
       })
       column.filters = [...new Set(filters)].map((f) => {
         return { text: f, value: f }
@@ -200,23 +181,32 @@ const fetchCustomers = async () => {
 
 onMounted(async () => {
   emit('header-data', {
-    title: 'Customers',
-    crumbs: [{ name: 'Customers', route: 'customers' }]
+    title: 'Accounts',
+    crumbs: [
+      { name: 'Accounts', route: 'accounts' },
+
+    ]
   })
-  await fetchCustomers()
+
+
+  await fetchProducts()
 })
-const handleResizeColumn = (w, col) => {
+const handleResizeColumn = (w, col: any) => {
   col.width = w
 }
-const handleCreateCustomer = () => {
-  openCreateModal.value = true
+const handleCreateProduct = () => {
+  router.push({ name: 'createAccount' })
 }
-const closeCreateModal = async (isSuccess) => {
-  if (isSuccess) await fetchCustomers()
+const closeCreateModal = async (isSuccess: boolean) => {
+  if (isSuccess) await fetchProducts()
   openCreateModal.value = false
 }
 
-const onChange = async (pagination, filters, sorter) => {
+const onChange = async (
+  pagination: Record<string, number>,
+  filters: Record<string, string>,
+  sorter: Record<string, string>
+) => {
   try {
     Object.keys(filters).forEach((key) => {
       state.filters[key] = filters[key]
@@ -224,10 +214,10 @@ const onChange = async (pagination, filters, sorter) => {
     state.page = pagination.current
     state.size = pagination.pageSize
 
-    const params = {
+    const params: Iparams = {
       filter: filters,
       page: pagination.current,
-      size: pagination.pageSize
+      take: pagination.pageSize
     }
 
     if (sorter?.field && sorter?.order) {
@@ -238,7 +228,7 @@ const onChange = async (pagination, filters, sorter) => {
 
     if (state.search) params['search'] = state.search
 
-    await customerStore.getCustomers(params)
+    await productStore.getCustomers(params)
   } catch (e) {
     console.log(e)
     message.error(e.response?.data?.message || e.message || JSON.stringify(e))
@@ -247,135 +237,201 @@ const onChange = async (pagination, filters, sorter) => {
 watch(
   () => state.search,
   async (val) => {
-    const params = {
+    const params: Iparams = {
       filter: state.filters,
       page: state.page,
-      size: state.size,
+      take: state.size,
       sort: state.sort
     }
     if (val) params['search'] = val
-    await customerStore.getCustomers(params)
+    await productStore.getCustomers(params)
   }
 )
-const console = (key) => {
-  console.log('key:', key)
+
+const changePassword = async () => {
+  try {
+    if (!newPassword.value || (newPassword.value !== newPasswordRepeat.value)) {
+      message.error('Пароли должны совпадать')
+      return
+    }
+    await productStore.changePassword(selectedAccountId.value, newPassword.value)
+    message.success('Пароль удачно изменен')
+    openPasswordModal.value = false
+
+  } catch (e) {
+    console.log(e)
+    message.error(e.response?.data?.message || e.message || JSON.stringify(e))
+  }
 }
+
+const cancelChangePassword = () => {
+  selectedAccountId.value = ''
+  newPassword.value = ''
+  newPasswordRepeat.value = ''
+  openPasswordModal.value = false
+
+}
+
+
+
+
+
+
 </script>
 <template>
   <div class="customers-wrapper">
-    <div class="cutomer-header">
-      <h1 class="invisible md:visible">Customers Summary</h1>
-      <button class="cutomer-header_btn w-fit " @click="handleCreateCustomer">
+    <!-- <CustomerCreateComponent :open="openCreateModal = true" @close="closeCreateModal" /> -->
+    <!-- <div class="customer-panels flex flex-col lg:flex-row">
+      <div class="customer-panels_all w-full lg:w-[45%] bg-[#C40F30] text-white">
+        <div class="flex items-center w-full justify-between max-h-[50%] mb-[2rem]">
+          <div class="flex gap-2 items-center w-fit">
+            <div class="customer-panels_all_top_icon">
+              <BagIcon :color="'white'" />
+            </div>
+            <div class="h-fit flex text-lg">Inventory Summary</div>
+          </div>
+          <p class="flex h-fit leading-none items-start text-sm">All Categories</p>
+        </div>
+
+        <div class="customer-panels_all_bottom justify-bottom mt-4">
+          <div class="customer-panels_all_bottom_col">
+            <p>All Products</p>
+            <span>{{ productStore.total }} </span>
+          </div>
+          <div class="customer-panels_all_bottom_col">
+            <p>Categories</p>
+            <span>{{ productStore.categories.length }} </span>
+          </div>
+          <div class="customer-panels_all_bottom_col">
+            <p>In-Stock</p>
+            <span>{{ productStore.inStock }} </span>
+          </div>
+          <div class="customer-panels_all_bottom_col">
+            <p>Out of Stock</p>
+            <span>{{ productStore.outOfStock }} </span>
+          </div>
+        </div>
+
+      </div>
+      <div class="customer-panels_all  w-full lg:w-[35%] bg-white justify-start items-start">
+        <div class="flex flex-col text-black h-full w-full items-start justify-start text-gray-500">
+          <div class="leading-[100%] mt-2 mb-6 cursor-pointer hover:text-black"
+            :class="{ underline: selectedFilterCategory === 'All' }" @click="handleFilter('All')">
+            All products
+          </div>
+          <div class="flex w-full gap-6 flex-col md:flex-row">
+            <div class="flex flex-col leading-[200%] mr-0 md:mr-6 items-start">
+              <div class="cursor-pointer hover:text-black" :class="{ underline: selectedFilterCategory === 'Beer' }"
+                @click="handleFilter('Beer')">
+                Beer
+              </div>
+              <div class="cursor-pointer hover:text-black" :class="{ underline: selectedFilterCategory === 'Cider' }"
+                @click="handleFilter('Cider')">
+                Cider
+              </div>
+              <div class="cursor-pointer hover:text-black" @click="handleFilter('Wine')"
+                :class="{ underline: selectedFilterCategory === 'Wine' }">
+                Wine
+              </div>
+            </div>
+            <div class="flex flex-col leading-[200%] ml-0 md:ml-6 items-start">
+              <div class="cursor-pointer hover:text-black" @click="handleFilter('Cocktails')"
+                :class="{ underline: selectedFilterCategory === 'Cocktails' }">
+                Cocktails
+              </div>
+              <div class="cursor-pointer hover:text-black" @click="handleFilter('Alchohol free')"
+                :class="{ underline: selectedFilterCategory === 'Alchohol free' }">
+                Alchohol free
+              </div>
+              <div class="cursor-pointer hover:text-black" @click="handleFilter('Snacks')"
+                :class="{ underline: selectedFilterCategory === 'Snacks' }">
+                Snacks
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" w-full lg:w-[18%] flex flex-col gap-4 ml-4 items-end px-4 lg:px-0">
+        <button class="cutomer-header_btn bg-[#c40f30] w-fit px-4 text-white" @click="handleCreateProduct">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Add a New Product
+        </button>
+        <button
+          class="cutomer-header_btn bg-white text-black justify-center flex items-center rounded-xl gap-2 px-4 w-fit"
+          @click="handleCreateProduct">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5V19" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 12H19" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <p class="mr-5">Upload CSV List</p>
+        </button>
+      </div>
+    </div> -->
+    <a-modal v-model:open="openPasswordModal" title="Изменить пароль">
+      <div class="w-full flex flex-col gap-2 leading-normal">
+        <p>Новый пароль</p>
+        <input type="text" v-model="newPassword" class="border-black rounded-md border p-2" />
+        <p class="mt-2">Повторите пароль</p>
+        <input type="text" v-model="newPasswordRepeat" class="border-black rounded-md border p-2" />
+      </div>
+      <template #footer>
+        <a-button key="back" @click="cancelChangePassword">Отмена</a-button>
+        <a-button @click="changePassword">Изменить</a-button>
+      </template>
+    </a-modal>
+
+    <div class=" w-full  flex flex-col gap-4 ml-4 items-end px-4 lg:px-4 pt-4">
+      <button class="cutomer-header_btn bg-[#005534] w-fit px-4 text-white" @click="handleCreateProduct">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 5V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        Add a New Customer
+        Создать аккаунт
       </button>
-    </div>
-    <CustomerCreateComponent :open="openCreateModal" @close="closeCreateModal" />
-    <div class="customer-panels flex-col md:flex-row">
-      <div class="customer-panels_all w-full md:w-[49.4%]">
 
-        <div class="customer-panels_all_top">
-          <div class="customer-panels_all_top_icon">
-            <UsersIcon />
-          </div>
-        </div>
-        <div class="customer-panels_all_bottom">
-          <div class="customer-panels_all_bottom_col flex-col">
-            <p>All Customers</p>
-            <span>{{ customerStore.total }} <span>+15.80%</span></span>
-          </div>
-          <div class="customer-panels_all_bottom_col">
-            <p>Active</p>
-            <span>{{ customerStore.activeCustomers }} </span>
-          </div>
-          <div class="customer-panels_all_bottom_col">
-            <p>In-Active</p>
-            <span>{{ customerStore.inActiveCustomers }} </span>
-          </div>
-        </div>
-      </div>
-      <div class="customer-panels_all w-full md:w-[49.4%]">
-        <div class="customer-panels_all_top">
-          <div class="customer-panels_all_top_icon">
-            <BagIcon />
-          </div>
-        </div>
-        <div class="customer-panels_all_bottom">
-          <div class="customer-panels_all_bottom_col">
-            <p>New Customers</p>
-            <span>{{ customerStore.total }} <span>+15.80%</span></span>
-          </div>
-          <div class="customer-panels_all_bottom_col">
-            <p>All Orders</p>
-            <span>{{ customerStore.allOrders }} </span>
-          </div>
-          <div class="customer-panels_all_bottom_col">
-            <p>Abandoned Carts</p>
-            <span>{{ customerStore.inActiveCustomers }} </span>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="customer-table">
-      <a-table :columns="responsiveColumns" :loading="isLoading" :data-source="customerStore.customers" @change="onChange"
-        @resizeColumn="handleResizeColumn" :showHeader="true" :pagination="{
+      <a-table :columns="responsiveColumns" :loading="isLoading" :data-source="productStore.customers"
+        @change="onChange" @resizeColumn="handleResizeColumn" :showHeader="true" :pagination="{
           current: state.page,
-          total: customerStore.total,
+          total: productStore.total,
           pageSize: state.size,
           showSizeChanger: true,
           pageSizeOptions: [5, 10, 20]
         }">
         <template #title>
           <div class="customer-table_filters">
-            <p>Customers</p>
+            <p>Аккаунты</p>
             <div class="customer-table_filters_filter" v-if="props.screenWidth > 850">
               <a-input v-model:value="state.search"></a-input>
-              <button>
-                <FilterIcon />Filter
-              </button>
-              <button>
-                <SendIcon />Download
-              </button>
-              <!-- <button>bulk_action</button> -->
+
+
             </div>
           </div>
         </template>
-        <template  #bodyCell="{ column, record }">
-          <template v-if="column?.key === 'status_id'">
-            <span>
-              <a-tag class="md:text-sm text-xs" :color="record.status_id === 1 ? 'green' : 'red'">
-                {{ record.status_id === 1 ? 'Active' : 'Inactive' }}
-              </a-tag>
-            </span>
-          </template>
-          <template v-if="column?.key === 'created_at'">
-            {{ new Date(record.created_at).toLocaleString() }}
-          </template>
-          <template v-if="column?.key === 'order_total'">
-            <p class="md:text-sm text-xs">{{
-              Number(record.order_total).toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'GBP'
-              })
-            }}</p>
-          </template>
-          <template v-if="column?.key === 'all_orders'">
-            <p class="md:text-sm text-xs">{{
-              Number(record.all_orders)
-             
-            }}</p>
-          </template>
-          <template v-if="column?.key === 'id'">
-            <div class="text-xs md:text-sm" @click="router.push({ name: 'customer', params: { id: record.id } })">
-              {{ record.id }}
+        <template #bodyCell="{ column, record }">
+
+
+          <template v-if="column?.key === 'password_hash'">
+            <div class="text-sm">
+              <button @click="openPassword(record.id)"
+                class="px-2 py-2 bg-[#005534] rounded-lg text-white hover:opacity-75">Сменить пароль</button>
             </div>
           </template>
-          <template v-if="column?.key === 'name'">
-            <div class="cursor-pointer text-xs md:text-sm" @click="router.push({ name: 'customer', params: { id: record.id } })">
-              <p class="hover:text-blue-500">{{ record.name }}</p>
+
+
+          <template v-if="column?.key === 'id'">
+            <div class="text-sm">
+              <p class="text-xs md:text-sm"> {{ record.id }}</p>
+            </div>
+          </template>
+
+          <template v-if="column?.key === 'login'">
+            <div class="flex items-center gap-4">
+              <p class="text-xs md:text-sm ">{{ record.login }}</p>
             </div>
           </template>
         </template>
@@ -386,61 +442,67 @@ const console = (key) => {
 </template>
 <style scoped lang="scss">
 .customers-wrapper {
-  @apply w-full h-fit flex text-black p-4 flex-col overflow-y-auto overflow-x-hidden;
+  @apply w-full h-fit flex text-black p-4 pt-0 flex-col overflow-y-auto overflow-x-hidden gap-4;
 
-  .cutomer-header {
-    @apply w-full flex items-center justify-between;
-    color: var(--Black-60, #45464e);
+  .cutomer-header_btn {
+    cursor: pointer;
+    // color: #fff;
+    text-align: center;
     font-family: Inter;
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
+    border-radius: 12px;
+    // background: #c40f30;
+    border: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
 
-    .cutomer-header_btn {
-      cursor: pointer;
-      color: #fff;
-      text-align: center;
-      font-family: Inter;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      border-radius: 12px;
-      background: #c40f30;
-      border: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem 0.5rem 1rem;
-
-      &:hover {
-        opacity: 0.75;
-      }
+    &:hover {
+      opacity: 0.75;
     }
   }
 
   .customer-panels {
-    @apply w-full flex py-4 gap-4;
+    width: 100%;
+    // min-height: 100%;
+    // display: flex;
+    padding: 1rem 0 1rem 0;
+    gap: 1rem;
 
     .customer-panels_all {
-      @apply flex flex-col p-4 rounded-lg bg-[#fff] min-h-[12vh];
+      border-radius: 12px;
+      // background: #fff;
+      //  width: 49.4%;
+      min-height: 14vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
 
       &_top {
-        @apply w-full flex justify-between h-1/2;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        height: 50%;
 
         &_icon {
           padding: 0.5rem;
           border-radius: 5px;
-          background-color: #ececec;
+          // background-color: #ececec;
           height: fit-content;
           display: flex;
         }
       }
 
       &_bottom {
-        @apply w-full flex justify-between h-1/2;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
 
+        // height: 50%;
         &_col {
           display: flex;
           flex-direction: column;
@@ -449,27 +511,24 @@ const console = (key) => {
           text-align: start;
 
           p {
-            color: var(--Black-30, #8b8d97);
+            // color: var(--Black-30, #8b8d97);
             font-family: Inter;
-            font-size: clamp(12px, 14px, 1.2vw);
+            font-size: 14px;
             font-style: normal;
             font-weight: 400;
             line-height: normal;
           }
 
           span {
-            color: var(--Black-60, #45464e);
+            // color: var(--Black-60, #45464e);
             font-family: Poppins;
-            font-size: clamp(14px, 20px, 1.25vw);
+            font-size: 20px;
             font-style: normal;
             font-weight: 500;
             line-height: normal;
-            display: flex;
 
             span {
-              margin-left: 5px;
-              margin-top: 7px;
-              color: var(--Action-Green, #519c66);
+              // color: var(--Action-Green, #519c66);
               font-family: Inter;
               font-size: 12px;
               font-style: normal;
@@ -490,14 +549,11 @@ const console = (key) => {
   }
 
   .customer-table {
-    position: relative;
     width: 100%;
-    max-height: 90%;
-
-    // height:90%;
-    // display: flex;
-    // flex-direction: column;
-    overflow-y: auto;
+    height: fit-content;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
     padding: 0 1rem;
     border-radius: 12px;
     background: #fff;
@@ -514,7 +570,6 @@ const console = (key) => {
 
     /* Firefox */
     &_filters {
-      // position: sticky;
       display: flex;
       width: 100%;
       justify-content: space-between;
@@ -556,7 +611,7 @@ const console = (key) => {
           height: 2rem;
           border-radius: 4px;
           border: 1px solid var(--Black-50, #53545c);
-          background: #fff;
+
 
           &:hover {
             // background: rgba(94, 99, 102, 0.08);

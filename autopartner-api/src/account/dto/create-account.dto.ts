@@ -23,9 +23,4 @@ export class AccountCreateDto {
     })
     @IsString()
     login: string
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    role: string
 }
